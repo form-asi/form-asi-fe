@@ -16,7 +16,7 @@ function BottomCTA({ primaryAction, secondaryAction }: BottomCTAProps) {
   const { label: primaryLabel, ...primaryButtonProps } = primaryAction;
   const { label: secondaryLabel, ...secondaryButtonProps } = secondaryAction ?? {};
   return (
-    <div className="mt-auto h-bottom-cta shrink-0">
+    <div data-slot="bottom-cta" className="mt-auto h-bottom-cta shrink-0">
       <div className="fixed bottom-cta-offset left-1/2 z-10 w-full max-w-app -translate-x-1/2 border-t bg-background pr-safe-right pb-cta-safe-bottom pl-safe-left">
         <div className="grid auto-cols-fr grid-flow-col gap-layout-gap px-page-inset py-cta-inset">
           {secondaryAction && (

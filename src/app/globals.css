@@ -9,6 +9,15 @@
 }
 
 @theme inline {
+  --spacing-empty-state: var(--empty-state-gap);
+  --spacing-empty-state-inset-y: var(--empty-state-inset-y);
+  --spacing-empty-state-action: var(--empty-state-action-width);
+  --spacing-dialog-inset: var(--dialog-inset);
+  --spacing-dialog-gap: var(--dialog-gap);
+  --spacing-dialog-width: calc(100vw - var(--dialog-viewport-inset) * 2);
+  --spacing-dialog-height: calc(100dvh - var(--dialog-viewport-inset) * 2);
+  --container-dialog: var(--dialog-max-width);
+  --container-dialog-sm: var(--dialog-max-width-sm);
   --spacing-field-gap: var(--field-gap);
   --spacing-section-label-x: var(--section-label-inset-x);
   --spacing-section-label-y: var(--section-label-inset-y);
@@ -91,6 +100,23 @@
 }
 
 :root {
+  --empty-state-gap: 0.75rem;
+  --empty-state-inset-x: 0.625rem;
+  --empty-state-inset-y: 1.375rem;
+  --empty-state-action-width: 7.5rem;
+  --dialog-inset: 1rem;
+  --dialog-gap: 0.625rem;
+  --dialog-viewport-inset: 1.25rem;
+  --dialog-max-width: 24rem;
+  --dialog-max-width-sm: 16rem;
+  --toast-radius: 9999px;
+  --toast-width: calc(min(100vw, var(--app-max-width)) - var(--page-inset) * 2);
+  --toast-inset-inline: max(
+    var(--page-inset),
+    calc((100vw - var(--app-max-width)) / 2 + var(--page-inset))
+  );
+  --toast-navigation-height: 0px;
+  --toast-cta-height: 0px;
   --field-gap: 0.25rem;
   --section-label-inset-x: 0.5rem;
   --section-label-inset-y: 0.25rem;
@@ -202,6 +228,28 @@
 }
 
 @layer components {
+  body {
+    --toast-bottom-offset: calc(
+      env(safe-area-inset-bottom, 0px) +
+      var(--toast-navigation-height) +
+      var(--toast-cta-height) +
+      var(--page-inset)
+    );
+  }
+
+  body:has([data-slot="app-shell"][data-navigation="true"]) {
+    --toast-navigation-height: calc(var(--tab-bar-height) + var(--layout-border-width));
+  }
+
+  body:has([data-slot="bottom-cta"]) {
+    --toast-cta-height: calc(
+      var(--control-height-lg) +
+      var(--cta-inset) *
+      2 +
+      var(--layout-border-width)
+    );
+  }
+
   [data-slot="app-shell"][data-navigation="true"] {
     --app-bottom-height: var(--tab-bar-safe-height);
     --bottom-cta-offset: var(--tab-bar-safe-height);
