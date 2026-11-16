@@ -5,6 +5,8 @@ export const UI_MESSAGES = {
   optionalField: "선택",
   invalidField: "입력 내용을 확인해 주세요",
   notifications: "알림",
+  helpTime: "도움 시간",
+  helpTimeUnit: "분",
   retry: "다시 시도",
   toast: {
     saved: "저장했어요",
