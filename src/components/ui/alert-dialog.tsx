@@ -1,9 +1,10 @@
 "use client";
 
 import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog";
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps } from "class-variance-authority";
 import { cn } from "cn";
 import * as React from "react";
+import { alertDialogContentVariants, alertDialogStyles } from "@/components/ui/alert-dialog.styles";
 
 import { Button } from "@/components/ui/button";
 
@@ -23,24 +24,11 @@ function AlertDialogOverlay({ className, ...props }: AlertDialogPrimitive.Backdr
   return (
     <AlertDialogPrimitive.Backdrop
       data-slot="alert-dialog-overlay"
-      className={cn(
-        "fixed inset-0 isolate z-50 bg-overlay duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
-        className,
-      )}
+      className={cn(alertDialogStyles.overlay, className)}
       {...props}
     />
   );
 }
-
-const alertDialogContentVariants = cva(
-  "group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid max-h-dialog-height w-dialog-width -translate-1/2 gap-dialog-gap overflow-y-auto rounded-xl border bg-popover p-dialog-inset text-popover-foreground duration-100 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
-  {
-    variants: {
-      size: { default: "max-w-dialog", sm: "max-w-dialog-sm" },
-    },
-    defaultVariants: { size: "default" },
-  },
-);
 
 function AlertDialogContent({
   className,
@@ -88,10 +76,7 @@ function AlertDialogMedia({ className, ...props }: React.ComponentProps<"div">) 
   return (
     <div
       data-slot="alert-dialog-media"
-      className={cn(
-        "mb-2 inline-flex size-10 items-center justify-center rounded-md bg-muted sm:group-data-[size=default]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-6",
-        className,
-      )}
+      className={cn(alertDialogStyles.media, className)}
       {...props}
     />
   );
@@ -104,10 +89,7 @@ function AlertDialogTitle({
   return (
     <AlertDialogPrimitive.Title
       data-slot="alert-dialog-title"
-      className={cn(
-        "font-heading text-base font-medium sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2",
-        className,
-      )}
+      className={cn(alertDialogStyles.title, className)}
       {...props}
     />
   );
@@ -120,10 +102,7 @@ function AlertDialogDescription({
   return (
     <AlertDialogPrimitive.Description
       data-slot="alert-dialog-description"
-      className={cn(
-        "text-sm whitespace-pre-line text-popover-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
-        className,
-      )}
+      className={cn(alertDialogStyles.description, className)}
       {...props}
     />
   );
