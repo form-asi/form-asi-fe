@@ -1,0 +1,4 @@
+{
+  "*.{js,jsx,ts,tsx,mjs,cjs}": ["biome check --write --no-errors-on-unmatched", "eslint --fix"],
+  "*.{json,jsonc,css}": ["biome check --write --no-errors-on-unmatched"]
+}
