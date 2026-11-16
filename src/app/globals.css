@@ -9,6 +9,23 @@
 }
 
 @theme inline {
+  --spacing-safe-top: env(safe-area-inset-top, 0px);
+  --spacing-safe-right: env(safe-area-inset-right, 0px);
+  --spacing-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --spacing-safe-left: env(safe-area-inset-left, 0px);
+  --spacing-page-inset: var(--page-inset);
+  --spacing-header-inset: var(--header-inset);
+  --spacing-layout-gap: var(--layout-gap);
+  --spacing-cta-inset: var(--cta-inset);
+  --spacing-app-bottom: var(--app-bottom-height);
+  --spacing-cta-offset: var(--bottom-cta-offset);
+  --spacing-cta-safe-bottom: var(--bottom-cta-safe-bottom);
+  --spacing-bottom-cta: calc(
+    var(--control-height-lg) +
+    var(--cta-inset) *
+    2 +
+    var(--layout-border-width)
+  );
   --spacing-app: var(--app-max-width);
   --spacing-header: var(--header-height);
   --spacing-tab-bar: var(--tab-bar-height);
@@ -71,6 +88,19 @@
 }
 
 :root {
+  --page-inset: 0.875rem;
+  --header-inset: 0.75rem;
+  --layout-gap: 0.5rem;
+  --cta-inset: 0.625rem;
+  --layout-border-width: 1px;
+  --app-bottom-height: env(safe-area-inset-bottom, 0px);
+  --tab-bar-safe-height: calc(
+    var(--tab-bar-height) +
+    var(--layout-border-width) +
+    env(safe-area-inset-bottom, 0px)
+  );
+  --bottom-cta-offset: 0px;
+  --bottom-cta-safe-bottom: env(safe-area-inset-bottom, 0px);
   --app-max-width: 30rem;
   --header-height: 2.75rem;
   --tab-bar-height: 3rem;
@@ -163,6 +193,14 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer components {
+  [data-slot="app-shell"][data-navigation="true"] {
+    --app-bottom-height: var(--tab-bar-safe-height);
+    --bottom-cta-offset: var(--tab-bar-safe-height);
+    --bottom-cta-safe-bottom: 0px;
+  }
 }
 
 @layer base {

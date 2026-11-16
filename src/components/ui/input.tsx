@@ -16,7 +16,7 @@ type InputProps = Omit<ComponentProps<"input">, "size"> &
     endAdornment?: ReactNode;
   };
 
-/** @description 오른쪽 버튼·아이콘은 endAdornment로 전달하며 입력 ref는 실제 input에 연결됩니다. */
+/** @description endAdornment로 오른쪽 버튼·아이콘 전달, 입력 ref는 실제 input에 연결 */
 function Input({ className, type, size, endAdornment, ...props }: InputProps) {
   return (
     <div data-slot="input-container" className={cn(inputVariants({ size }), className)}>
