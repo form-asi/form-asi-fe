@@ -4,7 +4,58 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --spacing: 0.25rem;
+}
+
 @theme inline {
+  --spacing-empty-state: var(--empty-state-gap);
+  --spacing-empty-state-inset-y: var(--empty-state-inset-y);
+  --spacing-empty-state-action: var(--empty-state-action-width);
+  --spacing-dialog-inset: var(--dialog-inset);
+  --spacing-dialog-gap: var(--dialog-gap);
+  --spacing-dialog-width: calc(100vw - var(--dialog-viewport-inset) * 2);
+  --spacing-dialog-height: calc(100dvh - var(--dialog-viewport-inset) * 2);
+  --container-dialog: var(--dialog-max-width);
+  --container-dialog-sm: var(--dialog-max-width-sm);
+  --spacing-field-gap: var(--field-gap);
+  --spacing-section-label-x: var(--section-label-inset-x);
+  --spacing-section-label-y: var(--section-label-inset-y);
+  --spacing-safe-top: env(safe-area-inset-top, 0px);
+  --spacing-safe-right: env(safe-area-inset-right, 0px);
+  --spacing-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --spacing-safe-left: env(safe-area-inset-left, 0px);
+  --spacing-page-inset: var(--page-inset);
+  --spacing-header-inset: var(--header-inset);
+  --spacing-layout-gap: var(--layout-gap);
+  --spacing-cta-inset: var(--cta-inset);
+  --spacing-app-bottom: var(--app-bottom-height);
+  --spacing-cta-offset: var(--bottom-cta-offset);
+  --spacing-cta-safe-bottom: var(--bottom-cta-safe-bottom);
+  --spacing-bottom-cta: calc(
+    var(--control-height-lg) +
+    var(--cta-inset) *
+    2 +
+    var(--layout-border-width)
+  );
+  --spacing-app: var(--app-max-width);
+  --spacing-header: var(--header-height);
+  --spacing-tab-bar: var(--tab-bar-height);
+  --spacing-control: var(--control-height);
+  --spacing-control-sm: var(--control-height-sm);
+  --spacing-control-xs: var(--control-height-xs);
+  --spacing-control-lg: var(--control-height-lg);
+  --spacing-progress: var(--progress-height);
+  --spacing-switch-width: var(--switch-width);
+  --spacing-switch-height: var(--switch-height);
+  --spacing-switch-width-sm: var(--switch-width-sm);
+  --spacing-switch-height-sm: var(--switch-height-sm);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-disabled: var(--disabled);
+  --color-disabled-foreground: var(--disabled-foreground);
+  --color-destructive-subtle: var(--destructive-subtle);
+  --color-progress-secondary: var(--progress-secondary);
+  --color-overlay: var(--overlay);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
@@ -49,24 +100,78 @@
 }
 
 :root {
+  --empty-state-gap: 0.75rem;
+  --empty-state-inset-x: 0.625rem;
+  --empty-state-inset-y: 1.375rem;
+  --empty-state-action-width: 7.5rem;
+  --dialog-inset: 1rem;
+  --dialog-gap: 0.625rem;
+  --dialog-viewport-inset: 1.25rem;
+  --dialog-max-width: 24rem;
+  --dialog-max-width-sm: 16rem;
+  --toast-radius: 9999px;
+  --toast-width: calc(min(100vw, var(--app-max-width)) - var(--page-inset) * 2);
+  --toast-inset-inline: max(
+    var(--page-inset),
+    calc((100vw - var(--app-max-width)) / 2 + var(--page-inset))
+  );
+  --toast-navigation-height: 0px;
+  --toast-cta-height: 0px;
+  --field-gap: 0.25rem;
+  --section-label-inset-x: 0.5rem;
+  --section-label-inset-y: 0.25rem;
+  --page-inset: 0.875rem;
+  --header-inset: 0.75rem;
+  --layout-gap: 0.5rem;
+  --cta-inset: 0.625rem;
+  --layout-border-width: 1px;
+  --app-bottom-height: env(safe-area-inset-bottom, 0px);
+  --tab-bar-safe-height: calc(
+    var(--tab-bar-height) +
+    var(--layout-border-width) +
+    env(safe-area-inset-bottom, 0px)
+  );
+  --bottom-cta-offset: 0px;
+  --bottom-cta-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --app-max-width: 30rem;
+  --header-height: 2.75rem;
+  --tab-bar-height: 3rem;
+  --control-height: 2.5rem;
+  --control-height-sm: 2rem;
+  --control-height-xs: 1.5rem;
+  --control-height-lg: 3rem;
+  --progress-height: 0.375rem;
+  --switch-width: 2rem;
+  --switch-height: 1.15rem;
+  --switch-width-sm: 1.5rem;
+  --switch-height-sm: 0.875rem;
+  --switch-thumb-offset: calc(100% - 2px);
+  --card-spacing: 1rem;
+  --card-spacing-sm: 0.75rem;
+  --secondary-hover: oklch(0.85 0 0);
+  --disabled: oklch(0.94 0 0);
+  --disabled-foreground: oklch(0.65 0 0);
+  --destructive-subtle: oklch(0.97 0.015 25);
+  --progress-secondary: oklch(0.68 0 0);
+  --overlay: oklch(0 0 0 / 40%);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.705 0.191 47.6);
+  --primary: oklch(0.32 0 0);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: oklch(0.9 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.705 0.191 47.6);
+  --border: oklch(0.65 0 0);
+  --input: oklch(0.68 0 0);
+  --ring: oklch(0.45 0 0);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -84,14 +189,19 @@
 }
 
 .dark {
+  --secondary-hover: oklch(0.35 0 0);
+  --disabled: oklch(0.269 0 0);
+  --disabled-foreground: oklch(0.6 0 0);
+  --destructive-subtle: oklch(0.25 0.04 25);
+  --progress-secondary: oklch(0.55 0 0);
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.705 0.191 47.6);
-  --primary-foreground: oklch(1 0 0);
+  --primary: oklch(0.92 0 0);
+  --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -109,12 +219,42 @@
   --chart-5: oklch(0.269 0 0);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.92 0 0);
+  --sidebar-primary-foreground: oklch(0.205 0 0);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer components {
+  body {
+    --toast-bottom-offset: calc(
+      env(safe-area-inset-bottom, 0px) +
+      var(--toast-navigation-height) +
+      var(--toast-cta-height) +
+      var(--page-inset)
+    );
+  }
+
+  body:has([data-slot="app-shell"][data-navigation="true"]) {
+    --toast-navigation-height: calc(var(--tab-bar-height) + var(--layout-border-width));
+  }
+
+  body:has([data-slot="bottom-cta"]) {
+    --toast-cta-height: calc(
+      var(--control-height-lg) +
+      var(--cta-inset) *
+      2 +
+      var(--layout-border-width)
+    );
+  }
+
+  [data-slot="app-shell"][data-navigation="true"] {
+    --app-bottom-height: var(--tab-bar-safe-height);
+    --bottom-cta-offset: var(--tab-bar-safe-height);
+    --bottom-cta-safe-bottom: 0px;
+  }
 }
 
 @layer base {

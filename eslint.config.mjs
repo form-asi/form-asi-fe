@@ -12,7 +12,12 @@ export default defineConfig([
     files: ["**/*.{ts,tsx}"],
     ...betterTailwind.configs.recommended,
     settings: {
-      "better-tailwindcss": { entryPoint: "src/app/globals.css" },
+      "better-tailwindcss": {
+        entryPoint: "src/app/globals.css",
+        selectors: {
+          extends: [{ kind: "variable", name: ".*Styles$", match: [{ type: "objectValues" }] }],
+        },
+      },
     },
     rules: {
       ...betterTailwind.configs.recommended.rules,

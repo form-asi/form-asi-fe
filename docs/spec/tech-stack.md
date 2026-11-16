@@ -74,7 +74,7 @@ src/
 │  ├─ ui/          # shadcn 원본. 토큰과 variant만 수정
 │  ├─ common/      # 서비스 공용: AppHeader, TabBar, BottomSheet, ChipGroup, FormField
 │  └─ domain/      # Figma C-xx 컴포넌트: HelpTimeBar(C-01), SurveyCard(C-02)
-├─ features/       # 화면 단위: onboarding, explore, my-survey, mypage, notification
+├─ features/       # 화면 단위: onboarding, explore, my-survey, my-page, notification
 ├─ api/            # Orval 생성 코드, fetch 설정
 ├─ hooks/          # 공용 훅
 ├─ lib/            # 유틸(cn), dayjs 설정
