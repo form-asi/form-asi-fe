@@ -20,6 +20,8 @@
 | 린트               | ESLint (Flat Config)                        | 10.15            |
 | 포맷 · import 정렬 | Biome (linter 비활성)                       | 2.6              |
 | Git hook           | husky + lint-staged                         | 9.1 / 17.6       |
+| 커밋 메시지 검사   | commitlint (config-conventional)            | 21.2             |
+| 버전·릴리스        | release-please (GitHub Action)              | v5               |
 | E2E 테스트         | Playwright (핵심 흐름만)                    | 1.65             |
 | 패키지 매니저      | Bun (설치·스크립트만, 런타임은 Node)        | 1.2+             |
 | 웹 푸시            | Service Worker (Sprint 3에 결정)            | -                |

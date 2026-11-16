@@ -132,7 +132,7 @@ Users answer surveys to earn "help time" and spend it to collect responses for t
 
 ## Pull requests
 
-- Follow `docs/spec/git-convention.md`: branch from `develop` and open PRs into `develop` (`main` is production; never commit to `main` or `develop` directly). Branches `<type>/<kebab-description>` (`feature`, `fix`, `refactor`, `chore`, `docs`, `hotfix`), commits `<type>: <Korean summary>` (`feat`, `fix`, `refactor`, `style`, `docs`, `test`, `chore`).
+- Follow `docs/spec/git-convention.md`: branch from `develop` and open PRs into `develop` (`main` is production; never commit to `main` or `develop` directly). Branches `<type>/<kebab-description>` (`feature`, `fix`, `refactor`, `chore`, `docs`, `hotfix`), commits `<type>: <Korean summary>` (`feat`, `fix`, `refactor`, `style`, `docs`, `test`, `chore`). commitlint enforces this at commit-msg. Versions and tags are managed by release-please; never bump `package.json` version or create tags manually.
 - Hosted on GitHub. The husky pre-commit hook auto-fixes staged files (lint-staged), then runs `bun run check`; a failing check blocks the commit.
 - When work changes shared or high-impact code, describe the affected scope and expected side effects in the PR description.
 - Reference related screen IDs and `docs/` files in the PR description.

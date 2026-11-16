@@ -53,6 +53,20 @@ hotfix/*  ─PR→ main → develop 반영
   - `refactor: 설문 카드 컴포넌트 분리`
   - `chore: Orval 설정 추가`
 
+- 커밋 메시지는 husky `commit-msg` hook에서 commitlint로 검사한다. 허용되지 않은 type이나 형식이면 커밋이 중단된다.
+- 커밋 범위 표기(scope)는 선택이다: `feat(explore): 시간 필터 추가`
+
+## 버전과 릴리스
+
+- 버전은 SemVer(`vMAJOR.MINOR.PATCH`) Git 태그로 관리한다. 출시 전은 `0.x`, 출시 시점에 `v1.0.0`.
+- 출시 전(`0.x`): `feat` → minor, `fix` → patch, `feat!`/`BREAKING CHANGE` → minor
+- 릴리스는 release-please(GitHub Action)가 자동화한다.
+  1. `develop` → `main` 릴리스 PR 머지
+  2. release-please가 `main`에 Release PR 생성 (`package.json` 버전, `CHANGELOG.md` 갱신)
+  3. Release PR 머지 → `vX.Y.Z` 태그와 GitHub Release 생성 → 운영 배포 트리거
+- CHANGELOG에는 `feat`, `fix`, `refactor`만 노출된다.
+- 태그를 직접 만들거나 `package.json` 버전을 손으로 고치지 않는다.
+
 ## 커밋 전 검사
 
 husky pre-commit에서 lint-staged(자동 수정) → `bun run check`를 실행하고, 실패하면 커밋이 중단된다.
