@@ -1,7 +1,8 @@
 "use client";
 
+import { cva } from "class-variance-authority";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NavigationLink } from "@/components/ui/navigation-link";
 import { UI_MESSAGES } from "@/lib/ui-messages";
 
 const APP_TABS = [
@@ -10,6 +11,19 @@ const APP_TABS = [
   { href: "/my-survey", label: "내 설문" },
   { href: "/my-page", label: "마이페이지" },
 ] as const;
+
+const tabLinkVariants = cva(
+  "flex min-h-tab-bar min-w-0 flex-1 items-center justify-center text-xs outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-inset",
+  {
+    variants: {
+      active: {
+        true: "font-bold text-foreground",
+        false: "text-muted-foreground hover:text-foreground",
+      },
+    },
+    defaultVariants: { active: false },
+  },
+);
 
 function TabBar() {
   const pathname = usePathname();
@@ -22,9 +36,14 @@ function TabBar() {
         const isCurrentTab =
           pathname === tab.href || (tab.href !== "/" && pathname.startsWith(`${tab.href}/`));
         return (
-          <NavigationLink key={tab.href} href={tab.href} active={isCurrentTab}>
+          <Link
+            key={tab.href}
+            href={tab.href}
+            className={tabLinkVariants({ active: isCurrentTab })}
+            aria-current={isCurrentTab ? "page" : undefined}
+          >
             {tab.label}
-          </NavigationLink>
+          </Link>
         );
       })}
     </nav>

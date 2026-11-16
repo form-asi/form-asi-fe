@@ -31,7 +31,7 @@ Users answer surveys to earn "help time" and spend it to collect responses for t
 ## Project structure
 
 - `src/app/`: routes only. Keep pages thin and compose from `features/`.
-- `src/features/<feature>/`: screen-level UI, hooks, and logic per feature (`onboarding`, `explore`, `my-survey`, `mypage`, `notification`, `admin`).
+- `src/features/<feature>/`: screen-level UI, hooks, and logic per feature (`onboarding`, `explore`, `my-survey`, `my-page`, `notification`, `admin`).
 - `src/components/ui/`: shadcn primitives. Only adjust tokens and variants; no business logic.
 - `src/components/common/`: service-wide UI compositions (AppHeader, TabBar, BottomSheet, FormField).
 - `src/components/domain/`: domain UI shared across features (HelpTimeBar `C-01`, SurveyCard `C-02`).
