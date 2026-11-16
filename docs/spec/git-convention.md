@@ -2,7 +2,18 @@
 
 ## 브랜치
 
-- `main`: 배포 기준 브랜치. 작업은 브랜치를 따서 PR로 합친다.
+| 브랜치      | 역할                                          | 머지 대상                         |
+| ----------- | --------------------------------------------- | --------------------------------- |
+| `main`      | 운영(prd) 배포 기준. 직접 커밋 금지           | -                                 |
+| `develop`   | 개발 통합·개발 서버 배포 기준. 직접 커밋 금지 | `main` (릴리스 PR)                |
+| 작업 브랜치 | `develop`에서 분기                            | `develop` (PR)                    |
+| `hotfix/*`  | 운영 긴급 수정. `main`에서 분기               | `main` 머지 후 `develop`에도 반영 |
+
+```
+feature/* ─PR→ develop ─릴리스 PR→ main
+hotfix/*  ─PR→ main → develop 반영
+```
+
 - 이름: `<type>/<기능-설명>` (kebab-case, 영문)
 
 | type       | 용도                     | 예시                                             |
@@ -12,6 +23,7 @@
 | `refactor` | 동작 변화 없는 구조 개선 | `refactor/survey-card`                           |
 | `chore`    | 설정, 의존성, 빌드       | `chore/eslint-config`                            |
 | `docs`     | 문서                     | `docs/domain-help-time`                          |
+| `hotfix`   | 운영 긴급 수정           | `hotfix/login-redirect`                          |
 
 - 화면 단위 작업이면 화면 ID를 붙여도 된다: `feature/s-32-survey-register`
 
