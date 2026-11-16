@@ -27,6 +27,16 @@ hotfix/*  ─PR→ main → develop 반영
 
 - 화면 단위 작업이면 화면 ID를 붙여도 된다: `feature/s-32-survey-register`
 
+### 브랜치 보호 규칙 (GitHub Rulesets)
+
+`main`, `develop` 공통
+
+- 브랜치 삭제 금지
+- PR로만 병합 (직접 push 금지)
+- force push 금지
+
+> Organization이 GitHub Free 요금제인 동안은 private 레포에서 규칙이 **설정만 되고 강제되지 않는다.** GitHub Team으로 업그레이드하면 바로 적용된다. 그 전까지는 위 규칙을 팀 약속으로 지킨다.
+
 ## 커밋 메시지
 
 ```

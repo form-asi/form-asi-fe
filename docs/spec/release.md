@@ -62,4 +62,4 @@ feature/* ─squash PR→ develop ─merge PR→ main ─→ Release PR 자동 �
 **제약**
 
 - 기본 `GITHUB_TOKEN`으로 만든 Release PR에서는 다른 워크플로(CI 등)가 실행되지 않는다. Release PR에도 CI가 필요해지면 PAT나 GitHub App 토큰으로 바꾼다.
-- Organization이 Free 요금제라 private 레포에서는 브랜치 보호 규칙이 적용되지 않는다. 머지 방식(develop은 squash, main은 merge commit)은 팀 약속으로 지킨다.
+- 머지 방식(develop은 squash, main은 merge commit)은 브랜치 규칙으로 강제하지 않으므로 팀 약속으로 지킨다.
