@@ -58,14 +58,7 @@ hotfix/*  ─PR→ main → develop 반영
 
 ## 버전과 릴리스
 
-- 버전은 SemVer(`vMAJOR.MINOR.PATCH`) Git 태그로 관리한다. 출시 전은 `0.x`, 출시 시점에 `v1.0.0`.
-- 출시 전(`0.x`): `feat` → minor, `fix` → patch, `feat!`/`BREAKING CHANGE` → minor
-- 릴리스는 release-please(GitHub Action)가 자동화한다.
-  1. `develop` → `main` 릴리스 PR 머지
-  2. release-please가 `main`에 Release PR 생성 (`package.json` 버전, `CHANGELOG.md` 갱신)
-  3. Release PR 머지 → `vX.Y.Z` 태그와 GitHub Release 생성 → 운영 배포 트리거
-- CHANGELOG에는 `feat`, `fix`, `refactor`만 노출된다.
-- 태그를 직접 만들거나 `package.json` 버전을 손으로 고치지 않는다.
+SemVer Git 태그와 release-please로 관리한다. 절차와 규칙은 [release.md](./release.md) 참고.
 
 ## 커밋 전 검사
 
