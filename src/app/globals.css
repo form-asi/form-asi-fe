@@ -9,6 +9,9 @@
 }
 
 @theme inline {
+  --spacing-field-gap: var(--field-gap);
+  --spacing-section-label-x: var(--section-label-inset-x);
+  --spacing-section-label-y: var(--section-label-inset-y);
   --spacing-safe-top: env(safe-area-inset-top, 0px);
   --spacing-safe-right: env(safe-area-inset-right, 0px);
   --spacing-safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -88,6 +91,9 @@
 }
 
 :root {
+  --field-gap: 0.25rem;
+  --section-label-inset-x: 0.5rem;
+  --section-label-inset-y: 0.25rem;
   --page-inset: 0.875rem;
   --header-inset: 0.75rem;
   --layout-gap: 0.5rem;
