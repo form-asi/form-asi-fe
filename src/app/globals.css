@@ -4,7 +4,29 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --spacing: 0.25rem;
+}
+
 @theme inline {
+  --spacing-app: var(--app-max-width);
+  --spacing-header: var(--header-height);
+  --spacing-tab-bar: var(--tab-bar-height);
+  --spacing-control: var(--control-height);
+  --spacing-control-sm: var(--control-height-sm);
+  --spacing-control-xs: var(--control-height-xs);
+  --spacing-control-lg: var(--control-height-lg);
+  --spacing-progress: var(--progress-height);
+  --spacing-switch-width: var(--switch-width);
+  --spacing-switch-height: var(--switch-height);
+  --spacing-switch-width-sm: var(--switch-width-sm);
+  --spacing-switch-height-sm: var(--switch-height-sm);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-disabled: var(--disabled);
+  --color-disabled-foreground: var(--disabled-foreground);
+  --color-destructive-subtle: var(--destructive-subtle);
+  --color-progress-secondary: var(--progress-secondary);
+  --color-overlay: var(--overlay);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
@@ -49,24 +71,45 @@
 }
 
 :root {
+  --app-max-width: 30rem;
+  --header-height: 2.75rem;
+  --tab-bar-height: 3rem;
+  --control-height: 2.5rem;
+  --control-height-sm: 2rem;
+  --control-height-xs: 1.5rem;
+  --control-height-lg: 3rem;
+  --progress-height: 0.375rem;
+  --switch-width: 2rem;
+  --switch-height: 1.15rem;
+  --switch-width-sm: 1.5rem;
+  --switch-height-sm: 0.875rem;
+  --switch-thumb-offset: calc(100% - 2px);
+  --card-spacing: 1rem;
+  --card-spacing-sm: 0.75rem;
+  --secondary-hover: oklch(0.85 0 0);
+  --disabled: oklch(0.94 0 0);
+  --disabled-foreground: oklch(0.65 0 0);
+  --destructive-subtle: oklch(0.97 0.015 25);
+  --progress-secondary: oklch(0.68 0 0);
+  --overlay: oklch(0 0 0 / 40%);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.705 0.191 47.6);
+  --primary: oklch(0.32 0 0);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: oklch(0.9 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.705 0.191 47.6);
+  --border: oklch(0.65 0 0);
+  --input: oklch(0.68 0 0);
+  --ring: oklch(0.45 0 0);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -84,14 +127,19 @@
 }
 
 .dark {
+  --secondary-hover: oklch(0.35 0 0);
+  --disabled: oklch(0.269 0 0);
+  --disabled-foreground: oklch(0.6 0 0);
+  --destructive-subtle: oklch(0.25 0.04 25);
+  --progress-secondary: oklch(0.55 0 0);
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.705 0.191 47.6);
-  --primary-foreground: oklch(1 0 0);
+  --primary: oklch(0.92 0 0);
+  --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -109,8 +157,8 @@
   --chart-5: oklch(0.269 0 0);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.92 0 0);
+  --sidebar-primary-foreground: oklch(0.205 0 0);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
