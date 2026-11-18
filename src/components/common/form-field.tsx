@@ -80,7 +80,7 @@ function FormField<
         <label
           id={labelId}
           htmlFor={fieldId}
-          className="flex items-center gap-field-gap text-sm font-bold"
+          className="flex items-center gap-field-gap text-label-md font-bold"
         >
           {label}
           {required ? (
@@ -88,13 +88,13 @@ function FormField<
               *
             </span>
           ) : (
-            <span className="text-xs font-normal text-muted-foreground">
+            <span className="text-caption-lg font-normal text-muted-foreground">
               {UI_MESSAGES.optionalField}
             </span>
           )}
         </label>
         {labelHint && (
-          <span id={hintId} className="text-xs text-muted-foreground">
+          <span id={hintId} className="text-caption-lg text-muted-foreground">
             {labelHint}
           </span>
         )}
@@ -110,12 +110,12 @@ function FormField<
         },
       })}
       {description && (
-        <p id={descriptionId} className="text-xs text-muted-foreground">
+        <p id={descriptionId} className="text-caption-lg text-muted-foreground">
           {description}
         </p>
       )}
       {errorMessage && (
-        <p id={errorId} role="alert" className="text-xs text-destructive">
+        <p id={errorId} role="alert" className="text-caption-lg text-destructive">
           {errorMessage}
         </p>
       )}

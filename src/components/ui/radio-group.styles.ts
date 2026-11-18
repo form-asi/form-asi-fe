@@ -6,7 +6,7 @@ export const radioVariants = cva(
     variants: {
       variant: {
         default: "size-4 rounded-full",
-        card: "min-h-control w-full rounded-lg bg-background px-2.5 py-2 text-left text-sm",
+        card: "min-h-control w-full rounded-lg bg-background px-2.5 py-2 text-left text-label-md",
       },
     },
     defaultVariants: { variant: "default" },
