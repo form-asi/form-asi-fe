@@ -112,6 +112,7 @@
   --color-foreground-quaternary: var(--foreground-neutral-quaternary);
   --color-brand: var(--surface-brand-primary);
   --color-brand-subtle: var(--surface-brand-secondary);
+  --color-positive: var(--foreground-positive-primary);
   --color-cautionary: var(--foreground-cautionary-primary);
   --color-cautionary-subtle: var(--surface-cautionary-secondary);
   --color-inverse: var(--surface-inverse-primary);
@@ -155,6 +156,7 @@
   --radius-md: 0.625rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
 }
 
 :root {
@@ -213,11 +215,14 @@
   --background-neutral-primary: #ffffff;
   --surface-elevated-primary: #ffffff;
   --surface-neutral-primary: #1b1b1b14;
+  --surface-neutral-primary-pressed: #1b1b1b26;
   --surface-neutral-secondary: #1b1b1b0d;
+  --surface-negative-primary: #ed0824;
   --surface-brand-primary: #ed660c;
   --surface-brand-secondary: #ed660c1a;
   --surface-cautionary-secondary: #fdf9ee;
   --surface-inverse-primary: #1b1b1be5;
+  --surface-inverse-primary-disabled: #1b1b1b66;
   --surface-dim-primary: #1111114d;
   --foreground-neutral-primary: #262626;
   --foreground-neutral-secondary: #5e5e5e;
@@ -225,6 +230,7 @@
   --foreground-neutral-quaternary: #9e9e9e;
   --foreground-brand-primary: #ed660c;
   --foreground-negative-primary: #ed0824;
+  --foreground-positive-primary: #008844;
   --foreground-cautionary-primary: #c98100;
   --foreground-inverse-primary: #ffffff;
   --foreground-inverse-secondary: #ffffffb2;
@@ -232,6 +238,7 @@
   --line-neutral-primary: #919191;
   --line-neutral-secondary: #1b1b1b21;
   --line-neutral-tertiary: #1b1b1b14;
+  --line-negative-primary: #ed0824;
 
   /* shadcn 계약. 이름은 shadcn이 소유하므로 생성 대상에서 제외하고
      원시 토큰을 참조만 한다. 덕분에 `shadcn add`가 그대로 동작한다. */
@@ -259,9 +266,9 @@
   --disabled: var(--surface-neutral-primary);
   --disabled-foreground: var(--foreground-neutral-quaternary);
   --progress-secondary: var(--foreground-neutral-quaternary);
-  /* shortcut: 디자인에 hover/subtle 토큰이 없어 중성 알파 한 단계 위와 negative 혼합으로 대체.
-     디자이너가 해당 토큰을 정의하면 원시 토큰 참조로 교체한다. */
-  --secondary-hover: var(--line-neutral-secondary);
+  --secondary-hover: var(--surface-neutral-primary-pressed);
+  /* shortcut: 디자인에 negative subtle 토큰이 없어 negative 6% 혼합으로 대체.
+     디자이너가 정의하면 원시 토큰 참조로 교체한다. */
   --destructive-subtle: color-mix(in srgb, var(--foreground-negative-primary) 6%, #ffffff);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
