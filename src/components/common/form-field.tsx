@@ -28,6 +28,7 @@ type FormFieldProps<
 > & {
   control: NonNullable<UseControllerProps<FormValues, FieldName, TransformedValues>["control"]>;
   label: string;
+  labelHint?: string;
   required?: boolean;
   description?: string;
   render: (props: {
@@ -50,6 +51,7 @@ function FormField<
   disabled,
   shouldUnregister,
   label,
+  labelHint,
   required = false,
   description,
   render,
@@ -57,34 +59,46 @@ function FormField<
   const { field, fieldState } = useController({ control, name, disabled, shouldUnregister });
   const fieldId = useId();
   const labelId = `${fieldId}-label`;
+  const hintId = `${fieldId}-hint`;
   const descriptionId = `${fieldId}-description`;
   const errorId = `${fieldId}-error`;
   const errorMessage = fieldState.invalid
     ? fieldState.error?.message || UI_MESSAGES.invalidField
     : undefined;
   const describedBy =
-    [description ? descriptionId : undefined, errorMessage ? errorId : undefined]
+    [
+      labelHint ? hintId : undefined,
+      description ? descriptionId : undefined,
+      errorMessage ? errorId : undefined,
+    ]
       .filter(Boolean)
       .join(" ") || undefined;
 
   return (
     <div className="flex flex-col gap-field-gap">
-      <label
-        id={labelId}
-        htmlFor={fieldId}
-        className="flex items-center gap-field-gap text-sm font-bold"
-      >
-        {label}
-        {required ? (
-          <span aria-hidden="true" className="text-destructive">
-            *
-          </span>
-        ) : (
-          <span className="text-xs font-normal text-muted-foreground">
-            {UI_MESSAGES.optionalField}
+      <div className="flex flex-wrap items-baseline gap-field-gap">
+        <label
+          id={labelId}
+          htmlFor={fieldId}
+          className="flex items-center gap-field-gap text-sm font-bold"
+        >
+          {label}
+          {required ? (
+            <span aria-hidden="true" className="text-destructive">
+              *
+            </span>
+          ) : (
+            <span className="text-xs font-normal text-muted-foreground">
+              {UI_MESSAGES.optionalField}
+            </span>
+          )}
+        </label>
+        {labelHint && (
+          <span id={hintId} className="text-xs text-muted-foreground">
+            {labelHint}
           </span>
         )}
-      </label>
+      </div>
       {render({
         field,
         controlProps: {
