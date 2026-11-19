@@ -68,6 +68,7 @@ Users answer surveys to earn "help time" and spend it to collect responses for t
 
 - Reuse existing shared hooks, utilities, constants, and common components when they fit the task.
 - Keep shared user-facing messages (toasts, errors) in one place and reuse them instead of duplicating strings.
+- Use `ROUTES` from `src/lib/routes.ts` for every `href`, `router.push`, and `router.replace`. Never hardcode route paths; add new screens to `ROUTES` first.
 - Before modifying shared or widely reused code, report the affected scope, expected side effects, and potential risks, then get approval before proceeding.
 - Treat `src/components/ui`, `src/components/common`, `src/components/domain`, `src/lib`, `src/hooks`, `src/providers`, `src/api/fetcher.ts`, and `src/app/globals.css` as shared code.
 

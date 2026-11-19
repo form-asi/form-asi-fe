@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { badgeVariants } from "@/components/ui/badge.styles";
 import { formatHelpTime } from "@/lib/format-help-time";
+import { ROUTES } from "@/lib/routes";
 import { UI_MESSAGES } from "@/lib/ui-messages";
 
 type HelpTimeChipProps = {
@@ -13,7 +14,7 @@ type HelpTimeChipProps = {
 function HelpTimeChip({ helpTimeBalance }: HelpTimeChipProps) {
   return (
     <Link
-      href="/my-page/help-time"
+      href={ROUTES.helpTime}
       data-slot="help-time-chip"
       className={cn(
         badgeVariants({

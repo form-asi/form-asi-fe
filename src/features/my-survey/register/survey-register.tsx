@@ -15,6 +15,7 @@ import { SurveyTargetStep } from "@/features/my-survey/register/components/surve
 import { useSurveyRegister } from "@/features/my-survey/register/hooks/use-survey-register";
 import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
 import { SURVEY_STEPS } from "@/features/my-survey/register/survey-register-schema";
+import { ROUTES } from "@/lib/routes";
 import { UI_MESSAGES } from "@/lib/ui-messages";
 
 export function SurveyRegister() {
@@ -25,7 +26,7 @@ export function SurveyRegister() {
     <>
       <AppHeader
         title={REGISTER_MESSAGES.title}
-        back={{ onBack: () => registration.handleRequestLeave("/my-survey") }}
+        back={{ onBack: () => registration.handleRequestLeave(ROUTES.mySurvey) }}
         rightSlot={
           balanceQuery.data !== undefined && (
             <div
@@ -39,7 +40,7 @@ export function SurveyRegister() {
                 )
                   return;
                 event.preventDefault();
-                registration.handleRequestLeave("/my-page/help-time");
+                registration.handleRequestLeave(ROUTES.helpTime);
               }}
             >
               <HelpTimeChip helpTimeBalance={balanceQuery.data} />

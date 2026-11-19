@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { tabBarStyles, tabLinkVariants } from "@/components/common/tab-bar.styles";
+import { ROUTES } from "@/lib/routes";
 import { UI_MESSAGES } from "@/lib/ui-messages";
 
 const APP_TABS = [
-  { href: "/", label: "홈" },
-  { href: "/explore", label: "탐색" },
-  { href: "/my-survey", label: "내 설문" },
-  { href: "/my-page", label: "마이페이지" },
+  { href: ROUTES.home, label: "홈" },
+  { href: ROUTES.explore, label: "탐색" },
+  { href: ROUTES.mySurvey, label: "내 설문" },
+  { href: ROUTES.myPage, label: "마이페이지" },
 ] as const;
 
 function TabBar() {
@@ -18,7 +19,8 @@ function TabBar() {
     <nav aria-label={UI_MESSAGES.mainNavigation} className={tabBarStyles.navigation}>
       {APP_TABS.map((tab) => {
         const isCurrentTab =
-          pathname === tab.href || (tab.href !== "/" && pathname.startsWith(`${tab.href}/`));
+          pathname === tab.href ||
+          (tab.href !== ROUTES.home && pathname.startsWith(`${tab.href}/`));
         return (
           <Link
             key={tab.href}

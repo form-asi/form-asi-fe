@@ -22,9 +22,10 @@ import {
   type SurveyRegisterValues,
   surveyRegisterSchema,
 } from "@/features/my-survey/register/survey-register-schema";
+import { type AppRoute, ROUTES } from "@/lib/routes";
 import { UI_MESSAGES } from "@/lib/ui-messages";
 
-type RegisterDialog = { kind: "leave"; destination: string } | { kind: "publish" } | null;
+type RegisterDialog = { kind: "leave"; destination: AppRoute } | { kind: "publish" } | null;
 const BALANCE_QUERY_KEY = ["survey-register", "help-time-balance"] as const;
 
 export function useSurveyRegister() {
@@ -49,14 +50,14 @@ export function useSurveyRegister() {
   const canPublish = validStep && helpTimeCost?.status === "affordable";
   const requiredHelpTime =
     helpTimeCost && helpTimeCost.status !== "incomplete" ? helpTimeCost.requiredHelpTime : 0;
-  const { releaseLeaveGuard } = useLeaveGuard(() => handleRequestLeave("/my-survey"));
+  const { releaseLeaveGuard } = useLeaveGuard(() => handleRequestLeave(ROUTES.mySurvey));
 
   function handleChangeStep(nextStep: SurveyRegisterStep) {
     setStep(nextStep);
     requestAnimationFrame(() => headingRef.current?.focus());
   }
 
-  async function leaveRegistration(destination: string) {
+  async function leaveRegistration(destination: AppRoute) {
     if (leaving.current) return;
     leaving.current = true;
     await releaseLeaveGuard();
@@ -67,7 +68,7 @@ export function useSurveyRegister() {
     leaving.current = false;
   }
 
-  function handleRequestLeave(destination: string) {
+  function handleRequestLeave(destination: AppRoute) {
     if (publishMutation.isPending || leaving.current) return;
     if (step === "info" && !isDirty) {
       void leaveRegistration(destination);
@@ -90,7 +91,7 @@ export function useSurveyRegister() {
     const survey = form.getValues();
     const published = await publishMutation.mutateAsync(survey);
     queryClient.setQueryData(BALANCE_QUERY_KEY, published.helpTimeBalance);
-    await leaveRegistration("/my-survey");
+    await leaveRegistration(ROUTES.mySurvey);
     toast.success(UI_MESSAGES.toast.surveyPublished);
   }
 
