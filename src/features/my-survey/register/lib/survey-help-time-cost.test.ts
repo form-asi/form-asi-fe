@@ -1,5 +1,5 @@
+import { test } from "bun:test";
 import assert from "node:assert/strict";
-import { test } from "node:test";
 import { parseDigitsInput } from "@/features/my-survey/register/lib/parse-digits-input";
 import { getHelpTimeCost } from "@/features/my-survey/register/lib/survey-help-time-cost";
 

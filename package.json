@@ -11,6 +11,7 @@
     "format": "biome check --write",
     "typecheck": "next typegen && tsc --noEmit",
     "check": "biome check && eslint && next typegen && tsc --noEmit",
+    "test": "bun test",
     "api:gen": "orval",
     "prepare": "husky"
   },
@@ -40,6 +41,7 @@
     "@tailwindcss/turbopack": "4.3.3",
     "@tanstack/eslint-plugin-query": "^5.107.1",
     "@tanstack/react-query-devtools": "^5.107.1",
+    "@types/bun": "^1.4.4",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
