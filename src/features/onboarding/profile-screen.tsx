@@ -15,6 +15,7 @@ import {
   createEmptyProfile,
   type ProfileValues,
 } from "@/components/domain/profile-form/profile-schema";
+import { ROUTES } from "@/lib/routes";
 import { UI_MESSAGES } from "@/lib/ui-messages";
 
 export function OnboardingProfileScreen() {
@@ -26,7 +27,7 @@ export function OnboardingProfileScreen() {
   async function handleStartWithProfile(profile: ProfileValues) {
     const savedProfile = await saveProfile.mutateAsync(profile);
     queryClient.setQueryData(["profile", "current"], savedProfile);
-    router.replace("/explore");
+    router.replace(ROUTES.explore);
   }
 
   const header = <AppHeader title={PROFILE_MESSAGES.createTitle} />;
