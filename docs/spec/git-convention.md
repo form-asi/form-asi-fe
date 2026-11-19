@@ -16,14 +16,15 @@ hotfix/*  ─PR→ main → develop 반영
 
 - 이름: `<type>/<기능-설명>` (kebab-case, 영문)
 
-| type       | 용도                     | 예시                                             |
-| ---------- | ------------------------ | ------------------------------------------------ |
-| `feature`  | 새 기능, 화면            | `feature/kakao-login`, `feature/survey-register` |
-| `fix`      | 버그 수정                | `fix/nickname-duplicate-check`                   |
-| `refactor` | 동작 변화 없는 구조 개선 | `refactor/survey-card`                           |
-| `chore`    | 설정, 의존성, 빌드       | `chore/eslint-config`                            |
-| `docs`     | 문서                     | `docs/domain-help-time`                          |
-| `hotfix`   | 운영 긴급 수정           | `hotfix/login-redirect`                          |
+| type       | 용도                        | 예시                                             |
+| ---------- | --------------------------- | ------------------------------------------------ |
+| `feature`  | 새 기능, 화면               | `feature/kakao-login`, `feature/survey-register` |
+| `fix`      | 버그 수정                   | `fix/nickname-duplicate-check`                   |
+| `refactor` | 동작 변화 없는 구조 개선    | `refactor/survey-card`                           |
+| `chore`    | 설정, 의존성, 빌드          | `chore/eslint-config`                            |
+| `docs`     | 문서                        | `docs/domain-help-time`                          |
+| `hotfix`   | 운영 긴급 수정              | `hotfix/login-redirect`                          |
+| `design`   | 디자이너가 직접 올리는 변경 | `design/tokens`                                  |
 
 - 화면 단위 작업이면 화면 ID를 붙여도 된다: `feature/s-32-survey-register`
 
