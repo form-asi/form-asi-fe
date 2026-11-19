@@ -6,11 +6,11 @@ import { useFormContext } from "react-hook-form";
 import { FormField } from "@/components/common/form-field";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/model/survey-register-messages";
+import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
 import {
   SURVEY_DURATION_MINUTES,
   type SurveyRegisterValues,
-} from "@/features/my-survey/register/model/survey-register-schema";
+} from "@/features/my-survey/register/survey-register-schema";
 import { formatHelpTime } from "@/lib/format-help-time";
 
 export function SurveyDurationField() {

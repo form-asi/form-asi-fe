@@ -3,14 +3,14 @@ import { test } from "node:test";
 import {
   getHelpTimeBalanceMock,
   publishSurveyMock,
-} from "@/features/my-survey/register/api/survey-register-api.mock";
+} from "@/features/my-survey/register/mocks/survey-register-api.mock";
 import {
   createEmptySurvey,
   isSurveyStepValid,
   SURVEY_DURATION_MINUTES,
   type SurveyRegisterValues,
   surveyRegisterSchema,
-} from "@/features/my-survey/register/model/survey-register-schema";
+} from "@/features/my-survey/register/survey-register-schema";
 
 const validSurvey: SurveyRegisterValues = {
   ...createEmptySurvey(),

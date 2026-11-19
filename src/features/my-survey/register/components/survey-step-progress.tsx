@@ -1,10 +1,10 @@
 import { type Ref } from "react";
 import { Progress } from "@/components/ui/progress";
-import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/model/survey-register-messages";
+import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
 import {
   SURVEY_STEPS,
   type SurveyRegisterStep,
-} from "@/features/my-survey/register/model/survey-register-schema";
+} from "@/features/my-survey/register/survey-register-schema";
 
 export function SurveyStepProgress({
   step,

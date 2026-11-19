@@ -7,10 +7,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { SurveyDurationField } from "@/features/my-survey/register/components/survey-duration-field";
+import { parseDigitsInput } from "@/features/my-survey/register/lib/parse-digits-input";
+import { getHelpTimeCost } from "@/features/my-survey/register/lib/survey-help-time-cost";
+import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
+import { type SurveyRegisterValues } from "@/features/my-survey/register/survey-register-schema";
 import { formatHelpTime } from "@/lib/format-help-time";
-import { SurveyDurationField } from "../components/survey-duration-field";
-import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "../model/survey-register-messages";
-import { type SurveyRegisterValues } from "../model/survey-register-schema";
 
 export function SurveyScaleStep({ helpTimeBalance }: { helpTimeBalance: number }) {
   const { control } = useFormContext<SurveyRegisterValues>();
@@ -18,12 +20,16 @@ export function SurveyScaleStep({ helpTimeBalance }: { helpTimeBalance: number }
     control,
     name: ["respondentCount", "durationMinutes"],
   });
-  const hasScale =
-    typeof respondentCount === "number" &&
-    respondentCount >= 1 &&
-    typeof durationMinutes === "number";
-  const requiredHelpTime = hasScale ? respondentCount * durationMinutes : 0;
-  const missingHelpTime = requiredHelpTime - helpTimeBalance;
+  const helpTimeCost = getHelpTimeCost({ respondentCount, durationMinutes }, helpTimeBalance);
+
+  function handleRespondentInputChange(
+    respondentInput: string,
+    updateRespondentCount: (count: number | "") => void,
+  ) {
+    const parsedCount = parseDigitsInput(respondentInput);
+    if (parsedCount.accepted) updateRespondentCount(parsedCount.fieldValue);
+  }
+
   return (
     <>
       <FormField
@@ -36,11 +42,7 @@ export function SurveyScaleStep({ helpTimeBalance }: { helpTimeBalance: number }
             {...field}
             {...controlProps}
             inputMode="numeric"
-            onChange={(event) => {
-              const respondentInput = event.target.value;
-              if (/^\d*$/.test(respondentInput))
-                field.onChange(respondentInput === "" ? "" : Number(respondentInput));
-            }}
+            onChange={(event) => handleRespondentInputChange(event.target.value, field.onChange)}
             endAdornment={
               <>
                 <span>{REGISTER_MESSAGES.respondentUnit}</span>
@@ -75,9 +77,12 @@ export function SurveyScaleStep({ helpTimeBalance }: { helpTimeBalance: number }
           <div className="flex flex-col gap-layout-gap" aria-live="polite">
             <h3 className="text-label-md font-bold">{REGISTER_MESSAGES.requiredHelpTime}</h3>
             <p>
-              {hasScale
-                ? REGISTER_MESSAGES.cost(durationMinutes, respondentCount)
-                : REGISTER_MESSAGES.incompleteCost}
+              {helpTimeCost.status === "incomplete"
+                ? REGISTER_MESSAGES.incompleteCost
+                : REGISTER_MESSAGES.cost(
+                    helpTimeCost.durationMinutes,
+                    helpTimeCost.respondentCount,
+                  )}
             </p>
             <p>
               {REGISTER_MESSAGES.myHelpTime}{" "}
@@ -89,10 +94,10 @@ export function SurveyScaleStep({ helpTimeBalance }: { helpTimeBalance: number }
           </div>
         </CardContent>
       </Card>
-      {hasScale && helpTimeBalance >= 0 && missingHelpTime > 0 && (
+      {helpTimeCost.status === "insufficient" && (
         <Alert variant="destructive">
           <AlertDescription>
-            {REGISTER_MESSAGES.insufficientHelpTime(missingHelpTime)}
+            {REGISTER_MESSAGES.insufficientHelpTime(helpTimeCost.missingHelpTime)}
           </AlertDescription>
         </Alert>
       )}

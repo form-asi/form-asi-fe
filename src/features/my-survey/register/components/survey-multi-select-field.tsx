@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { type SurveyRegisterValues } from "@/features/my-survey/register/model/survey-register-schema";
+import { type SurveyRegisterValues } from "@/features/my-survey/register/survey-register-schema";
 
 type SurveyMultiSelectFieldProps = {
   name: FieldPathByValue<SurveyRegisterValues, string[]>;

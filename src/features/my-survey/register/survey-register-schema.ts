@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { SURVEY_PURPOSE_OPTIONS } from "@/features/my-survey/register/model/survey-purpose-options";
-import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/model/survey-register-messages";
+import { SURVEY_PURPOSE_OPTIONS } from "@/features/my-survey/register/survey-purpose-options";
+import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
 import {
   CHILDREN_OPTIONS,
   DRIVING_LICENSE_OPTIONS,
@@ -13,7 +13,7 @@ import {
   PET_EXPERIENCE_OPTIONS,
   PET_TYPE_OPTIONS,
   REGION_OPTIONS,
-} from "./survey-target-options";
+} from "@/features/my-survey/register/survey-target-options";
 
 export const SURVEY_DURATION_MINUTES = [1, 2, 3, 5, 7, 10, 15, 20, 30, 40, 50, 60] as const;
 const optionalAge = z.union([

@@ -6,9 +6,13 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { UI_MESSAGES } from "@/lib/ui-messages";
-import { getHelpTimeBalanceMock, publishSurveyMock } from "../api/survey-register-api.mock";
-import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "../model/survey-register-messages";
+import { useLeaveGuard } from "@/features/my-survey/register/hooks/use-leave-guard";
+import { getHelpTimeCost } from "@/features/my-survey/register/lib/survey-help-time-cost";
+import {
+  getHelpTimeBalanceMock,
+  publishSurveyMock,
+} from "@/features/my-survey/register/mocks/survey-register-api.mock";
+import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
 import {
   createEmptySurvey,
   isSurveyStepValid,
@@ -17,8 +21,8 @@ import {
   type SurveyRegisterStep,
   type SurveyRegisterValues,
   surveyRegisterSchema,
-} from "../model/survey-register-schema";
-import { useLeaveGuard } from "./use-leave-guard";
+} from "@/features/my-survey/register/survey-register-schema";
+import { UI_MESSAGES } from "@/lib/ui-messages";
 
 type RegisterDialog = { kind: "leave"; destination: string } | { kind: "publish" } | null;
 const BALANCE_QUERY_KEY = ["survey-register", "help-time-balance"] as const;
@@ -39,14 +43,12 @@ export function useSurveyRegister() {
   const balanceQuery = useQuery({ queryKey: BALANCE_QUERY_KEY, queryFn: getHelpTimeBalanceMock });
   const publishMutation = useMutation({ mutationFn: publishSurveyMock });
   const draft = useWatch({ control: form.control });
-  const requiredHelpTime = Number(draft.respondentCount) * Number(draft.durationMinutes);
   const validStep = isSurveyStepValid(step, draft);
-  const canPublish =
-    validStep &&
-    Number.isSafeInteger(requiredHelpTime) &&
-    requiredHelpTime > 0 &&
-    balanceQuery.data !== undefined &&
-    balanceQuery.data >= requiredHelpTime;
+  const helpTimeCost =
+    balanceQuery.data === undefined ? null : getHelpTimeCost(draft, balanceQuery.data);
+  const canPublish = validStep && helpTimeCost?.status === "affordable";
+  const requiredHelpTime =
+    helpTimeCost && helpTimeCost.status !== "incomplete" ? helpTimeCost.requiredHelpTime : 0;
   const { releaseLeaveGuard } = useLeaveGuard(() => handleRequestLeave("/my-survey"));
 
   function handleChangeStep(nextStep: SurveyRegisterStep) {

@@ -3,13 +3,13 @@
 import { useFormContext, useWatch } from "react-hook-form";
 import { PROFILE_MESSAGES } from "@/components/domain/profile-form/profile-messages";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { SurveyAgeFields } from "../components/survey-age-fields";
-import { SurveyMultiSelectField } from "../components/survey-multi-select-field";
-import { SurveySection } from "../components/survey-section";
-import { SurveyTextField } from "../components/survey-text-field";
-import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "../model/survey-register-messages";
-import { type SurveyRegisterValues } from "../model/survey-register-schema";
-import * as options from "../model/survey-target-options";
+import { SurveyAgeFields } from "@/features/my-survey/register/components/survey-age-fields";
+import { SurveyMultiSelectField } from "@/features/my-survey/register/components/survey-multi-select-field";
+import { SurveySection } from "@/features/my-survey/register/components/survey-section";
+import { SurveyTextField } from "@/features/my-survey/register/components/survey-text-field";
+import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
+import { type SurveyRegisterValues } from "@/features/my-survey/register/survey-register-schema";
+import * as options from "@/features/my-survey/register/survey-target-options";
 
 const BASIC_FIELDS = [
   { name: "gender", options: options.GENDER_OPTIONS },

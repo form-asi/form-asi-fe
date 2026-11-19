@@ -7,15 +7,15 @@ import { ConfirmDialog } from "@/components/common/confirm-dialog";
 import { EmptyState } from "@/components/common/empty-state";
 import { HelpTimeChip } from "@/components/domain/help-time-chip";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { SurveyInfoStep } from "@/features/my-survey/register/components/survey-info-step";
+import { SurveyIntroStep } from "@/features/my-survey/register/components/survey-intro-step";
+import { SurveyScaleStep } from "@/features/my-survey/register/components/survey-scale-step";
+import { SurveyStepProgress } from "@/features/my-survey/register/components/survey-step-progress";
+import { SurveyTargetStep } from "@/features/my-survey/register/components/survey-target-step";
+import { useSurveyRegister } from "@/features/my-survey/register/hooks/use-survey-register";
+import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
+import { SURVEY_STEPS } from "@/features/my-survey/register/survey-register-schema";
 import { UI_MESSAGES } from "@/lib/ui-messages";
-import { SurveyStepProgress } from "./components/survey-step-progress";
-import { useSurveyRegister } from "./hooks/use-survey-register";
-import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "./model/survey-register-messages";
-import { SURVEY_STEPS } from "./model/survey-register-schema";
-import { SurveyInfoStep } from "./steps/survey-info-step";
-import { SurveyIntroStep } from "./steps/survey-intro-step";
-import { SurveyScaleStep } from "./steps/survey-scale-step";
-import { SurveyTargetStep } from "./steps/survey-target-step";
 
 export function SurveyRegister() {
   const registration = useSurveyRegister();

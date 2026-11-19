@@ -4,8 +4,8 @@ import { useFormContext } from "react-hook-form";
 import { FormField } from "@/components/common/form-field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "../model/survey-register-messages";
-import { type SurveyRegisterValues } from "../model/survey-register-schema";
+import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
+import { type SurveyRegisterValues } from "@/features/my-survey/register/survey-register-schema";
 
 type SurveyTextFieldProps = {
   name: "title" | "description" | "reward" | "target.description";

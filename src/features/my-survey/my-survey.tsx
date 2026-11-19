@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { EmptyState } from "@/components/common/empty-state";
-import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/model/survey-register-messages";
+import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
 
 export function MySurvey() {
   const router = useRouter();
