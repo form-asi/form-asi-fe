@@ -1,0 +1,137 @@
+"use client";
+
+import { FormProvider } from "react-hook-form";
+import { AppHeader } from "@/components/common/app-header";
+import { BottomCTA } from "@/components/common/bottom-cta";
+import { ConfirmDialog } from "@/components/common/confirm-dialog";
+import { EmptyState } from "@/components/common/empty-state";
+import { HelpTimeChip } from "@/components/domain/help-time-chip";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { UI_MESSAGES } from "@/lib/ui-messages";
+import { SurveyStepProgress } from "./components/survey-step-progress";
+import { useSurveyRegister } from "./hooks/use-survey-register";
+import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "./model/survey-register-messages";
+import { SURVEY_STEPS } from "./model/survey-register-schema";
+import { SurveyInfoStep } from "./steps/survey-info-step";
+import { SurveyIntroStep } from "./steps/survey-intro-step";
+import { SurveyScaleStep } from "./steps/survey-scale-step";
+import { SurveyTargetStep } from "./steps/survey-target-step";
+
+export function SurveyRegister() {
+  const registration = useSurveyRegister();
+  const { form, step, dialog, balanceQuery } = registration;
+  const previousStep = SURVEY_STEPS[step].previous;
+  return (
+    <>
+      <AppHeader
+        title={REGISTER_MESSAGES.title}
+        back={{ onBack: () => registration.handleRequestLeave("/my-survey") }}
+        rightSlot={
+          balanceQuery.data !== undefined && (
+            <div
+              onClickCapture={(event) => {
+                if (
+                  event.button !== 0 ||
+                  event.metaKey ||
+                  event.ctrlKey ||
+                  event.shiftKey ||
+                  event.altKey
+                )
+                  return;
+                event.preventDefault();
+                registration.handleRequestLeave("/my-page/help-time");
+              }}
+            >
+              <HelpTimeChip helpTimeBalance={balanceQuery.data} />
+            </div>
+          )
+        }
+      />
+      {balanceQuery.isPending && (
+        <p role="status" className="p-page-inset text-body-sm text-muted-foreground">
+          {REGISTER_MESSAGES.loading}
+        </p>
+      )}
+      {balanceQuery.isError && (
+        <div className="p-page-inset">
+          <EmptyState
+            title={REGISTER_MESSAGES.loadFailed}
+            description={balanceQuery.error.message}
+            action={{
+              label: UI_MESSAGES.retry,
+              onClick: () => balanceQuery.refetch(),
+              disabled: balanceQuery.isFetching,
+            }}
+          />
+        </div>
+      )}
+      {balanceQuery.isSuccess && (
+        <FormProvider {...form}>
+          {balanceQuery.data < 0 && (
+            <div className="p-page-inset">
+              <Alert variant="destructive">
+                <AlertDescription>{REGISTER_MESSAGES.negativeHelpTime}</AlertDescription>
+              </Alert>
+            </div>
+          )}
+          <SurveyStepProgress step={step} headingRef={registration.headingRef} />
+          <form
+            id="survey-register"
+            className="flex flex-col gap-3 p-page-inset"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void registration.handleContinue();
+            }}
+          >
+            {step === "info" && <SurveyInfoStep />}
+            {step === "target" && <SurveyTargetStep />}
+            {step === "intro" && <SurveyIntroStep />}
+            {step === "scale" && <SurveyScaleStep helpTimeBalance={balanceQuery.data} />}
+          </form>
+          <BottomCTA
+            primaryAction={{
+              label: step === "scale" ? REGISTER_MESSAGES.register : REGISTER_MESSAGES.next,
+              type: "submit",
+              form: "survey-register",
+              disabled: step === "scale" ? !registration.canPublish : !registration.validStep,
+            }}
+            secondaryAction={
+              previousStep
+                ? {
+                    label: REGISTER_MESSAGES.previous,
+                    onClick: () => registration.handleChangeStep(previousStep),
+                  }
+                : undefined
+            }
+          />
+        </FormProvider>
+      )}
+      <ConfirmDialog
+        open={dialog?.kind === "leave"}
+        onOpenChange={(open) => {
+          if (!open) registration.setDialog(null);
+        }}
+        title={REGISTER_MESSAGES.leaveTitle}
+        description={REGISTER_MESSAGES.leaveDescription}
+        confirmLabel={REGISTER_MESSAGES.discard}
+        cancelLabel={REGISTER_MESSAGES.continueWriting}
+        emphasis="cancel"
+        onConfirm={registration.handleConfirmLeave}
+        onConfirmError={registration.handleConfirmError}
+      />
+      <ConfirmDialog
+        open={dialog?.kind === "publish"}
+        onOpenChange={(open) => {
+          if (!open) registration.setDialog(null);
+        }}
+        title={REGISTER_MESSAGES.publishTitle}
+        description={REGISTER_MESSAGES.publishDescription(registration.requiredHelpTime)}
+        confirmLabel={REGISTER_MESSAGES.publish}
+        cancelLabel={REGISTER_MESSAGES.returnToForm}
+        dismissOnBackdrop
+        onConfirm={registration.handleConfirmPublish}
+        onConfirmError={registration.handleConfirmError}
+      />
+    </>
+  );
+}
