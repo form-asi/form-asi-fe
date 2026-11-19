@@ -38,7 +38,7 @@ export function EditProfileScreen() {
     return (
       <>
         {header}
-        <p role="status" className="p-page-inset text-sm text-muted-foreground">
+        <p role="status" className="p-page-inset text-body-sm text-muted-foreground">
           {PROFILE_MESSAGES.loading}
         </p>
       </>

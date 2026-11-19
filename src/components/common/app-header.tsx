@@ -41,7 +41,7 @@ function AppHeader({ title, back, rightSlot }: AppHeaderProps) {
   return (
     <header className="flex min-h-header items-center gap-layout-gap border-b px-header-inset">
       {back && <HeaderBackControl action={back} />}
-      {title && <h1 className="min-w-0 truncate text-sm font-bold">{title}</h1>}
+      {title && <h1 className="min-w-0 truncate text-label-md font-bold">{title}</h1>}
       {rightSlot && (
         <div className="ml-auto flex shrink-0 items-center gap-layout-gap">{rightSlot}</div>
       )}

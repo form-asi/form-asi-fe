@@ -74,7 +74,9 @@ export function ProfileNicknameField({
               id={statusId}
               role={hasCheckError ? "alert" : "status"}
               className={
-                hasCheckError ? "text-xs text-destructive" : "text-xs text-muted-foreground"
+                hasCheckError
+                  ? "text-caption-lg text-destructive"
+                  : "text-caption-lg text-muted-foreground"
               }
             >
               {statusMessage}

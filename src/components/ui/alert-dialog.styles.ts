@@ -16,7 +16,7 @@ export const alertDialogStyles = {
   media:
     "mb-2 inline-flex size-10 items-center justify-center rounded-md bg-muted sm:group-data-[size=default]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-6",
   title:
-    "font-heading text-base font-medium sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2",
+    "font-heading text-title-sm font-medium sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2",
   description:
-    "text-sm whitespace-pre-line text-popover-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
+    "text-body-sm whitespace-pre-line text-popover-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
 } as const;

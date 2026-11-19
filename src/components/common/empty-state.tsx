@@ -18,8 +18,8 @@ function EmptyState({ title, description, action }: EmptyStateProps) {
     <Card variant="empty">
       <CardContent>
         <div className="flex flex-col items-center gap-empty-state text-center">
-          <h2 className="text-sm font-semibold">{title}</h2>
-          <p className="text-xs text-muted-foreground">{description}</p>
+          <h2 className="text-label-md font-semibold">{title}</h2>
+          <p className="text-caption-lg text-muted-foreground">{description}</p>
           {action && (
             <div className="w-empty-state-action pt-layout-gap">
               <Button
