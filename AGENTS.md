@@ -32,9 +32,11 @@ Users answer surveys to earn "help time" and spend it to collect responses for t
 
 - `src/app/`: routes only. Keep pages thin and compose from `features/`.
 - `src/features/<feature>/`: screen-level UI, hooks, and logic per feature (`onboarding`, `explore`, `my-survey`, `my-page`, `notification`, `admin`).
+  - Inside a feature, reuse the `src/` folder names: the root holds the top-level component, zod schema, options, and messages; then `components/` (including step components), `hooks/`, `lib/` (pure domain rules and helpers), and `mocks/` (temporary API stand-ins until Orval hooks exist).
+  - Do not add `model/`, `api/`, or `steps/` folders, and do not use a `Screen` suffix in names.
 - `src/components/ui/`: shadcn primitives. Only adjust tokens and variants; no business logic.
 - `src/components/common/`: service-wide UI compositions (AppHeader, TabBar, BottomSheet, FormField).
-- `src/components/domain/`: domain UI shared across features (HelpTimeBar `C-01`, SurveyCard `C-02`).
+- `src/components/domain/`: domain UI shared across features (HelpTimeBar `C-01`, SurveyCard `C-02`). Keep it flat: a component group gets one folder with its files side by side, without the `components/`·`hooks/`·`lib/` split used in features.
 - `src/api/`: Orval output and `fetcher.ts`.
 - `src/lib/`, `src/hooks/`, `src/providers/`: shared utilities, hooks, and providers.
 - Design tokens live in `src/app/globals.css` (`@theme`). Never hardcode colors or spacing values.
