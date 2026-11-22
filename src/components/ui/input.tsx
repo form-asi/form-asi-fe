@@ -1,8 +1,8 @@
 import { Input as InputPrimitive } from "@base-ui/react/input";
 import { type VariantProps } from "class-variance-authority";
-import { cn } from "cn";
 import { type ComponentProps, type ReactNode } from "react";
 import { inputStyles, inputVariants } from "@/components/ui/input.styles";
+import { cn } from "@/lib/utils";
 
 type InputProps = Omit<ComponentProps<"input">, "size"> &
   VariantProps<typeof inputVariants> & {

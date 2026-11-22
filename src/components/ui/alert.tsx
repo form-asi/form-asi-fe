@@ -1,7 +1,7 @@
 import { type VariantProps } from "class-variance-authority";
-import { cn } from "cn";
 import * as React from "react";
 import { alertStyles, alertVariants } from "@/components/ui/alert.styles";
+import { cn } from "@/lib/utils";
 
 function Alert({
   className,

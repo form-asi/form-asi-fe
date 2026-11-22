@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { SURVEY_PURPOSE_OPTIONS } from "@/features/my-survey/register/survey-purpose-options";
+import {
+  ETC_OPTION_VALUE,
+  SURVEY_FORMAT_OPTIONS,
+  SURVEY_PURPOSE_OPTIONS,
+} from "@/features/my-survey/register/survey-info-options";
 import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
 import {
   CHILDREN_OPTIONS,
@@ -15,7 +19,41 @@ import {
   REGION_OPTIONS,
 } from "@/features/my-survey/register/survey-target-options";
 
-export const SURVEY_DURATION_MINUTES = [1, 2, 3, 5, 7, 10, 15, 20, 30, 40, 50, 60] as const;
+// shortcut: 디자인에 1~20분까지만 보여 30분 이후는 기존 목록 유지, 기획 확정 후 갱신
+export const SURVEY_DURATION_MINUTES = [1, 3, 5, 10, 15, 20, 30, 40, 50, 60] as const;
+export const ETC_TEXT_LIMIT = 20;
+
+/** 하나를 고르고, "기타"면 직접 입력이 필요한 항목 */
+function choiceWithEtc<Code extends string>(options: readonly { value: Code }[]) {
+  return z
+    .object({
+      code: z.union([z.literal(""), z.enum(options.map((option) => option.value))]),
+      etcText: z.string().max(ETC_TEXT_LIMIT, REGISTER_MESSAGES.lengthError(ETC_TEXT_LIMIT)),
+    })
+    .superRefine((choice, context) => {
+      if (choice.code === "") {
+        context.addIssue({
+          code: "custom",
+          path: ["code"],
+          message: REGISTER_MESSAGES.requiredError,
+        });
+      }
+      const isEtcTextMissing = choice.code === ETC_OPTION_VALUE && choice.etcText.trim() === "";
+      if (isEtcTextMissing) {
+        context.addIssue({
+          code: "custom",
+          path: ["etcText"],
+          message: REGISTER_MESSAGES.requiredError,
+        });
+      }
+    });
+}
+
+const requiredText = (limit: number) =>
+  z
+    .string()
+    .max(limit, REGISTER_MESSAGES.lengthError(limit))
+    .refine((text) => text.trim().length > 0, REGISTER_MESSAGES.requiredError);
 const optionalAge = z.union([
   z.literal(""),
   z
@@ -24,8 +62,12 @@ const optionalAge = z.union([
     .min(14, REGISTER_MESSAGES.ageMinimumError)
     .max(100, REGISTER_MESSAGES.ageMaximumError),
 ]);
+export const TARGET_AUDIENCES = ["ANYONE", "CONDITIONAL"] as const;
+export type TargetAudience = (typeof TARGET_AUDIENCES)[number];
+
 const targetSchema = z
   .object({
+    audience: z.enum(TARGET_AUDIENCES),
     minimumAge: optionalAge,
     maximumAge: optionalAge,
     gender: z.array(z.enum(GENDER_OPTIONS.map((option) => option.value))),
@@ -57,15 +99,11 @@ const targetSchema = z
 
 export const surveyRegisterSchema = z.object({
   surveyUrl: z.string().startsWith("https://", REGISTER_MESSAGES.surveyUrlError),
-  purposes: z
-    .array(z.enum(SURVEY_PURPOSE_OPTIONS.map((option) => option.value)))
-    .min(1, REGISTER_MESSAGES.requiredError),
+  purpose: choiceWithEtc(SURVEY_PURPOSE_OPTIONS),
+  format: choiceWithEtc(SURVEY_FORMAT_OPTIONS),
   target: targetSchema,
-  title: z
-    .string()
-    .max(100, REGISTER_MESSAGES.lengthError(100))
-    .refine((title) => title.trim().length > 0, REGISTER_MESSAGES.requiredError),
-  description: z.string().max(700, REGISTER_MESSAGES.lengthError(700)),
+  title: requiredText(100),
+  description: requiredText(700),
   reward: z.string().max(100, REGISTER_MESSAGES.lengthError(100)),
   respondentCount: z
     .union([
@@ -88,14 +126,14 @@ export type SurveyRegisterValues = z.infer<typeof surveyRegisterSchema>;
 export type SurveyRegisterStep = "info" | "target" | "intro" | "scale";
 
 export const SURVEY_STEP_FIELDS = {
-  info: ["surveyUrl", "purposes"],
+  info: ["surveyUrl", "purpose", "format"],
   target: ["target"],
   intro: ["title", "description", "reward"],
   scale: ["respondentCount", "durationMinutes"],
 } as const;
 
 const stepSchemas = {
-  info: surveyRegisterSchema.pick({ surveyUrl: true, purposes: true }),
+  info: surveyRegisterSchema.pick({ surveyUrl: true, purpose: true, format: true }),
   target: surveyRegisterSchema.pick({ target: true }),
   intro: surveyRegisterSchema.pick({ title: true, description: true, reward: true }),
   scale: surveyRegisterSchema.pick({ respondentCount: true, durationMinutes: true }),
@@ -105,31 +143,37 @@ export function isSurveyStepValid(step: SurveyRegisterStep, draft: unknown) {
   return stepSchemas[step].safeParse(draft).success;
 }
 
+export function createEmptyTarget(): SurveyRegisterValues["target"] {
+  return {
+    audience: "ANYONE",
+    minimumAge: "",
+    maximumAge: "",
+    gender: [],
+    occupation: [],
+    fields: [],
+    region: [],
+    household: [],
+    householdSize: [],
+    maritalStatus: [],
+    children: [],
+    petExperience: [],
+    petTypes: [],
+    drivingLicense: [],
+    description: "",
+  };
+}
+
 export function createEmptySurvey(): SurveyRegisterValues {
   return {
     surveyUrl: "",
-    purposes: [],
+    purpose: { code: "", etcText: "" },
+    format: { code: "", etcText: "" },
     title: "",
     description: "",
     reward: "",
     respondentCount: "",
     durationMinutes: "",
-    target: {
-      minimumAge: "",
-      maximumAge: "",
-      gender: [],
-      occupation: [],
-      fields: [],
-      region: [],
-      household: [],
-      householdSize: [],
-      maritalStatus: [],
-      children: [],
-      petExperience: [],
-      petTypes: [],
-      drivingLicense: [],
-      description: "",
-    },
+    target: createEmptyTarget(),
   };
 }
 

@@ -1,9 +1,9 @@
-import { cn } from "cn";
 import Link from "next/link";
 import ChevronRightIcon from "@/assets/icons/chevron-right.svg";
 import { formatHelpTime } from "@/lib/format-help-time";
 import { ROUTES } from "@/lib/routes";
 import { UI_MESSAGES } from "@/lib/ui-messages";
+import { cn } from "@/lib/utils";
 
 type HelpTimeChipProps = {
   helpTimeBalance: number;

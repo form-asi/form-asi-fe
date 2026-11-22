@@ -6,9 +6,9 @@ export const toggleVariants = cva(
     variants: {
       variant: {
         default: "bg-transparent data-pressed:bg-muted",
-        chip: "h-control-sm rounded-full bg-secondary px-3 text-label-lg text-secondary-foreground hover:bg-secondary-hover data-pressed:bg-inverse data-pressed:text-inverse-foreground",
+        chip: "rounded-full bg-secondary text-label-lg text-secondary-foreground hover:bg-secondary-hover data-pressed:bg-inverse data-pressed:text-inverse-foreground",
         segmented:
-          "h-11 flex-1 rounded-lg border border-border bg-background px-5 text-label-lg text-foreground hover:bg-muted data-pressed:border-primary data-pressed:bg-primary data-pressed:font-semibold data-pressed:text-primary-foreground",
+          "flex-1 rounded-lg border border-border bg-background text-label-lg text-foreground hover:bg-muted data-pressed:border-primary data-pressed:bg-primary data-pressed:font-semibold data-pressed:text-primary-foreground",
         outline: "border border-input bg-transparent hover:bg-muted data-pressed:bg-muted",
       },
       size: {
@@ -16,6 +16,8 @@ export const toggleVariants = cva(
           "h-control-sm min-w-control-sm px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
         sm: "h-control-xs min-w-control-xs px-2.5 text-label-md has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
         lg: "h-control min-w-control px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
+        chip: "h-control-sm px-3",
+        segmented: "h-11 px-5",
       },
     },
     defaultVariants: {

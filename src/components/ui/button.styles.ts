@@ -9,6 +9,8 @@ export const buttonVariants = cva(
         default: "bg-primary text-primary-foreground hover:bg-primary/80",
         inverse:
           "bg-inverse text-inverse-foreground hover:bg-inverse-hover active:bg-inverse-pressed disabled:border-transparent disabled:bg-inverse-disabled disabled:text-inverse-foreground",
+        negative:
+          "bg-negative text-primary-foreground hover:bg-negative-hover active:bg-negative-pressed",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:

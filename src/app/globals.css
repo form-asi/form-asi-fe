@@ -68,6 +68,9 @@
   --color-inverse-hover: var(--surface-inverse-primary-hover);
   --color-inverse-pressed: var(--surface-inverse-primary-pressed);
   --color-inverse-disabled: var(--surface-inverse-primary-disabled);
+  --color-negative: var(--surface-negative-primary);
+  --color-negative-hover: var(--surface-negative-primary-hover);
+  --color-negative-pressed: var(--surface-negative-primary-pressed);
   --color-inverse-foreground: var(--foreground-inverse-primary);
   --color-inverse-foreground-secondary: var(--foreground-inverse-secondary);
   --color-line-strong: var(--line-neutral-primary);

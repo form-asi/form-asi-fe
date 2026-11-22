@@ -1,12 +1,12 @@
 "use client";
 
 import { Drawer } from "@base-ui/react/drawer";
-import { cn } from "cn";
 import { type ComponentProps, useState } from "react";
 import CheckIcon from "@/assets/icons/check.svg";
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
 import { Button } from "@/components/ui/button";
 import { UI_MESSAGES } from "@/lib/ui-messages";
+import { cn } from "@/lib/utils";
 
 type SelectSheetOption<OptionValue extends string> = { value: OptionValue; label: string };
 

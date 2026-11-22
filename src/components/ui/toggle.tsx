@@ -2,8 +2,8 @@
 
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
 import { type VariantProps } from "class-variance-authority";
-import { cn } from "cn";
 import { toggleVariants } from "@/components/ui/toggle.styles";
+import { cn } from "@/lib/utils";
 
 function Toggle({
   className,

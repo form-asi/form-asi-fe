@@ -1,7 +1,7 @@
 "use client";
 
 import { Progress as ProgressPrimitive } from "@base-ui/react/progress";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 
 /** @description secondaryValue는 현재 값 뒤에 표시할 보조 구간의 양. 남은 범위 이내로 제한 */
 function Progress({

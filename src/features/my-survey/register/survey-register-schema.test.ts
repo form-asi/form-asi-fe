@@ -15,20 +15,27 @@ import {
 const validSurvey: SurveyRegisterValues = {
   ...createEmptySurvey(),
   surveyUrl: "https://example.com/survey",
-  purposes: ["ACADEMIC_RESEARCH"],
+  purpose: { code: "ACADEMIC_RESEARCH", etcText: "" },
+  format: { code: "SIMPLE_CHOICE", etcText: "" },
   title: "테스트 설문",
+  description: "설문 소개",
   respondentCount: 5,
   durationMinutes: 3,
 };
 
 test("단계 검증은 뒤 단계의 미입력과 독립적", () => {
-  const draft = { ...createEmptySurvey(), surveyUrl: "https://", purposes: ["ETC"] };
+  const draft = {
+    ...createEmptySurvey(),
+    surveyUrl: "https://",
+    purpose: { code: "ETC", etcText: "졸업 프로젝트" },
+    format: { code: "OPEN_ENDED", etcText: "" },
+  };
   assert.ok(isSurveyStepValid("info", draft));
   assert.ok(isSurveyStepValid("target", draft));
   assert.equal(isSurveyStepValid("intro", draft), false);
   assert.equal(isSurveyStepValid("scale", draft), false);
   assert.equal(isSurveyStepValid("info", { ...draft, surveyUrl: "http://example.com" }), false);
-  assert.equal(isSurveyStepValid("info", { ...draft, purposes: [] }), false);
+  assert.equal(isSurveyStepValid("info", { ...draft, purpose: { code: "", etcText: "" } }), false);
 });
 
 test("나이 범위·한쪽 입력·역전 검증과 오류 경로", () => {
@@ -70,7 +77,19 @@ test("나이 범위·한쪽 입력·역전 검증과 오류 경로", () => {
   }
 });
 
-test("공백을 포함한 글자 수 제한과 공백뿐인 제목 거부", () => {
+test("목적·형식은 하나 필수, 기타는 직접 입력 필수(공백 포함 20자)", () => {
+  for (const field of ["purpose", "format"] as const) {
+    const parseChoice = (code: string, etcText: string) =>
+      surveyRegisterSchema.safeParse({ ...validSurvey, [field]: { code, etcText } }).success;
+    assert.equal(parseChoice("", ""), false);
+    assert.equal(parseChoice("UNKNOWN", ""), false);
+    assert.equal(parseChoice("ETC", "  "), false);
+    assert.ok(parseChoice("ETC", "가".repeat(20)));
+    assert.equal(parseChoice("ETC", "가".repeat(21)), false);
+  }
+});
+
+test("공백을 포함한 글자 수 제한과 공백뿐인 제목·소개 거부", () => {
   for (const [field, limit] of [
     ["title", 100],
     ["description", 700],
@@ -86,6 +105,7 @@ test("공백을 포함한 글자 수 제한과 공백뿐인 제목 거부", () =
     );
   }
   assert.equal(surveyRegisterSchema.safeParse({ ...validSurvey, title: "   " }).success, false);
+  assert.equal(surveyRegisterSchema.safeParse({ ...validSurvey, description: "" }).success, false);
   assert.ok(
     isSurveyStepValid("target", {
       target: { ...validSurvey.target, description: "가".repeat(200) },
@@ -103,7 +123,7 @@ test("소요 시간 선택지와 알 수 없는 대상 코드 검증", () => {
   for (const durationMinutes of SURVEY_DURATION_MINUTES) {
     assert.ok(surveyRegisterSchema.safeParse({ ...validSurvey, durationMinutes }).success);
   }
-  for (const durationMinutes of ["", 0, 4, 61]) {
+  for (const durationMinutes of ["", 0, 2, 7, 61]) {
     assert.equal(
       surveyRegisterSchema.safeParse({ ...validSurvey, durationMinutes }).success,
       false,
@@ -153,5 +173,4 @@ test("응답 수 최소 1명·정수 제한과 대상 기타 제외", () => {
       false,
     );
   }
-  assert.ok(surveyRegisterSchema.safeParse({ ...validSurvey, purposes: ["ETC"] }).success);
 });

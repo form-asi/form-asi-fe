@@ -19,7 +19,7 @@ type ConfirmDialogProps = {
   description: string;
   confirmLabel: string;
   cancelLabel: string;
-  emphasis?: "confirm" | "cancel";
+  tone?: "primary" | "negative";
   dismissOnBackdrop?: boolean;
   onConfirm: () => void | Promise<void>;
   onConfirmError: (error: unknown) => void;
@@ -37,7 +37,7 @@ function ConfirmDialog({
   description,
   confirmLabel,
   cancelLabel,
-  emphasis = "confirm",
+  tone = "primary",
   dismissOnBackdrop = false,
   onConfirm,
   onConfirmError,
@@ -62,19 +62,14 @@ function ConfirmDialog({
   }
 
   const cancelButton = (
-    <AlertDialogCancel
-      ref={cancelButtonRef}
-      variant={emphasis === "cancel" ? "default" : "secondary"}
-      size="lg"
-      disabled={isPending}
-    >
+    <AlertDialogCancel ref={cancelButtonRef} variant="secondary" size="lg" disabled={isPending}>
       {cancelLabel}
     </AlertDialogCancel>
   );
   const confirmButton = (
     <AlertDialogAction
       type="button"
-      variant={emphasis === "confirm" ? "default" : "secondary"}
+      variant={tone === "negative" ? "negative" : "default"}
       size="lg"
       disabled={isPending}
       onClick={handleConfirm}
@@ -106,8 +101,8 @@ function ConfirmDialog({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          {emphasis === "confirm" ? cancelButton : confirmButton}
-          {emphasis === "confirm" ? confirmButton : cancelButton}
+          {cancelButton}
+          {confirmButton}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

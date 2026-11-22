@@ -31,6 +31,11 @@ export default defineConfig([
         "warn",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
+      // 타이포 토큰을 아는 설정이 적용된 cn만 쓰도록 강제
+      "no-restricted-imports": [
+        "error",
+        { paths: [{ name: "cn", message: "@/lib/utils의 cn을 사용하세요." }] },
+      ],
     },
   },
   globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "src/api/generated/**"]),

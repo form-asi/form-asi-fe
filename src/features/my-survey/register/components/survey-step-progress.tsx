@@ -1,10 +1,10 @@
 import { type Ref } from "react";
-import { Progress } from "@/components/ui/progress";
 import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
 import {
   SURVEY_STEPS,
   type SurveyRegisterStep,
 } from "@/features/my-survey/register/survey-register-schema";
+import { cn } from "@/lib/utils";
 
 export function SurveyStepProgress({
   step,
@@ -13,23 +13,32 @@ export function SurveyStepProgress({
   step: SurveyRegisterStep;
   headingRef: Ref<HTMLHeadingElement>;
 }) {
-  const currentStep = SURVEY_STEPS[step];
+  const currentStepNumber = SURVEY_STEPS[step].number;
   return (
-    <div className="flex flex-col gap-layout-gap p-page-inset">
-      <div className="grid grid-cols-4 gap-1" aria-hidden="true">
+    <div className="flex flex-col gap-4">
+      <div
+        role="img"
+        aria-label={REGISTER_MESSAGES.stepProgress(currentStepNumber)}
+        className="grid grid-cols-4 gap-2"
+      >
         {Object.entries(SURVEY_STEPS).map(([stepName, { number }]) => (
-          <Progress key={stepName} value={number <= currentStep.number ? 1 : 0} max={1} />
+          <span
+            key={stepName}
+            className={cn(
+              "h-progress rounded-full",
+              number <= currentStepNumber ? "bg-brand" : "bg-secondary",
+            )}
+          />
         ))}
       </div>
-      <h2 ref={headingRef} className="text-label-md" tabIndex={-1} data-survey-step-title>
-        <span className="font-bold">{currentStep.number}/4</span> {REGISTER_MESSAGES.steps[step]}
+      <h2
+        ref={headingRef}
+        tabIndex={-1}
+        data-survey-step-title
+        className="text-heading-sm font-semibold outline-none"
+      >
+        {REGISTER_MESSAGES.stepQuestions[step]}
       </h2>
-      {step === "target" && (
-        <p className="text-caption-lg text-muted-foreground">{REGISTER_MESSAGES.targetStepHint}</p>
-      )}
-      {step === "intro" && (
-        <p className="text-caption-lg text-muted-foreground">{REGISTER_MESSAGES.introStepHint}</p>
-      )}
     </div>
   );
 }
