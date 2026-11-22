@@ -17,14 +17,14 @@ function BottomCTA({ primaryAction, secondaryAction }: BottomCTAProps) {
   const { label: secondaryLabel, ...secondaryButtonProps } = secondaryAction ?? {};
   return (
     <div data-slot="bottom-cta" className="mt-auto h-bottom-cta shrink-0">
-      <div className="fixed bottom-cta-offset left-1/2 z-10 w-full max-w-app -translate-x-1/2 border-t bg-background pr-safe-right pb-cta-safe-bottom pl-safe-left">
+      <div className="fixed bottom-cta-offset left-1/2 z-10 w-full max-w-app -translate-x-1/2 bg-background pr-safe-right pb-cta-safe-bottom pl-safe-left">
         <div className="grid auto-cols-fr grid-flow-col gap-layout-gap px-page-inset py-cta-inset">
           {secondaryAction && (
             <Button type="button" variant="secondary" size="lg" fullWidth {...secondaryButtonProps}>
               {secondaryLabel}
             </Button>
           )}
-          <Button type="button" size="lg" fullWidth {...primaryButtonProps}>
+          <Button type="button" variant="inverse" size="lg" fullWidth {...primaryButtonProps}>
             {primaryLabel}
           </Button>
         </div>

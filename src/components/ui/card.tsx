@@ -1,7 +1,7 @@
 import { type VariantProps } from "class-variance-authority";
-import { cn } from "cn";
 import * as React from "react";
 import { cardStyles, cardVariants } from "@/components/ui/card.styles";
+import { cn } from "@/lib/utils";
 
 function Card({
   className,

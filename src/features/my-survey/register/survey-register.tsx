@@ -75,20 +75,21 @@ export function SurveyRegister() {
               </Alert>
             </div>
           )}
-          <SurveyStepProgress step={step} headingRef={registration.headingRef} />
-          <form
-            id="survey-register"
-            className="flex flex-col gap-3 p-page-inset"
-            onSubmit={(event) => {
-              event.preventDefault();
-              void registration.handleContinue();
-            }}
-          >
-            {step === "info" && <SurveyInfoStep />}
-            {step === "target" && <SurveyTargetStep />}
-            {step === "intro" && <SurveyIntroStep />}
-            {step === "scale" && <SurveyScaleStep helpTimeBalance={balanceQuery.data} />}
-          </form>
+          <div className="flex flex-col gap-8 px-page-inset pt-2 pb-10">
+            <SurveyStepProgress step={step} headingRef={registration.headingRef} />
+            <form
+              id="survey-register"
+              onSubmit={(event) => {
+                event.preventDefault();
+                void registration.handleContinue();
+              }}
+            >
+              {step === "info" && <SurveyInfoStep />}
+              {step === "target" && <SurveyTargetStep />}
+              {step === "intro" && <SurveyIntroStep />}
+              {step === "scale" && <SurveyScaleStep helpTimeBalance={balanceQuery.data} />}
+            </form>
+          </div>
           <BottomCTA
             primaryAction={{
               label: step === "scale" ? REGISTER_MESSAGES.register : REGISTER_MESSAGES.next,
@@ -115,8 +116,8 @@ export function SurveyRegister() {
         title={REGISTER_MESSAGES.leaveTitle}
         description={REGISTER_MESSAGES.leaveDescription}
         confirmLabel={REGISTER_MESSAGES.discard}
-        cancelLabel={REGISTER_MESSAGES.continueWriting}
-        emphasis="cancel"
+        cancelLabel={REGISTER_MESSAGES.cancel}
+        tone="negative"
         onConfirm={registration.handleConfirmLeave}
         onConfirmError={registration.handleConfirmError}
       />
@@ -127,9 +128,8 @@ export function SurveyRegister() {
         }}
         title={REGISTER_MESSAGES.publishTitle}
         description={REGISTER_MESSAGES.publishDescription(registration.requiredHelpTime)}
-        confirmLabel={REGISTER_MESSAGES.publish}
-        cancelLabel={REGISTER_MESSAGES.returnToForm}
-        dismissOnBackdrop
+        confirmLabel={REGISTER_MESSAGES.register}
+        cancelLabel={REGISTER_MESSAGES.cancel}
         onConfirm={registration.handleConfirmPublish}
         onConfirmError={registration.handleConfirmError}
       />

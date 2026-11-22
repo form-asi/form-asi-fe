@@ -9,8 +9,9 @@ import {
   useController,
 } from "react-hook-form";
 import { UI_MESSAGES } from "@/lib/ui-messages";
+import { cn } from "@/lib/utils";
 
-type FieldControlProps = {
+export type FieldControlProps = {
   id: string;
   "aria-labelledby": string;
   "aria-describedby": string | undefined;
@@ -30,6 +31,10 @@ type FormFieldProps<
   label: string;
   labelHint?: string;
   required?: boolean;
+  /** 라벨을 화면에서 숨기고 스크린 리더에만 읽힘 (예: 기타 직접 입력칸) */
+  hideLabel?: boolean;
+  /** 선택 항목 옆 "선택" 표시. 묶음 제목에 이미 "선택"이 있으면 끈다 */
+  showOptionalTag?: boolean;
   description?: string;
   render: (props: {
     field: ControllerRenderProps<FormValues, FieldName>;
@@ -53,6 +58,8 @@ function FormField<
   label,
   labelHint,
   required = false,
+  hideLabel = false,
+  showOptionalTag = true,
   description,
   render,
 }: FormFieldProps<FormValues, FieldName, TransformedValues>) {
@@ -77,27 +84,36 @@ function FormField<
 
   return (
     <div className="flex flex-col gap-field-gap">
-      <div className="flex flex-wrap items-baseline gap-field-gap">
-        <label
-          id={labelId}
-          htmlFor={fieldId}
-          className="flex items-center gap-field-gap text-label-md font-bold"
-        >
-          {label}
-          {required ? (
-            <span aria-hidden="true" className="text-destructive">
-              *
-            </span>
-          ) : (
-            <span className="text-caption-lg font-normal text-muted-foreground">
-              {UI_MESSAGES.optionalField}
+      <div className={cn("flex flex-col gap-0.5 pl-0.5", hideLabel && "sr-only")}>
+        <div className="flex flex-wrap items-baseline gap-field-gap">
+          <label
+            id={labelId}
+            htmlFor={fieldId}
+            className="flex items-center gap-0.75 text-label-md font-semibold"
+          >
+            {label}
+            {required ? (
+              <span aria-hidden="true" className="font-medium text-destructive">
+                *
+              </span>
+            ) : (
+              showOptionalTag && (
+                <span className="text-caption-lg font-normal text-muted-foreground">
+                  {UI_MESSAGES.optionalField}
+                </span>
+              )
+            )}
+          </label>
+          {labelHint && (
+            <span id={hintId} className="text-caption-lg text-muted-foreground">
+              {labelHint}
             </span>
           )}
-        </label>
-        {labelHint && (
-          <span id={hintId} className="text-caption-lg text-muted-foreground">
-            {labelHint}
-          </span>
+        </div>
+        {showDescription && (
+          <p id={descriptionId} className="text-caption-lg text-foreground-secondary">
+            {description}
+          </p>
         )}
       </div>
       {render({
@@ -110,11 +126,6 @@ function FormField<
           "aria-required": required,
         },
       })}
-      {showDescription && (
-        <p id={descriptionId} className="text-caption-lg text-muted-foreground">
-          {description}
-        </p>
-      )}
       {errorMessage && (
         <p id={errorId} role="alert" className="text-caption-lg text-destructive">
           {errorMessage}

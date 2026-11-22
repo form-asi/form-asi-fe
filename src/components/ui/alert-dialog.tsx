@@ -2,11 +2,10 @@
 
 import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog";
 import { type VariantProps } from "class-variance-authority";
-import { cn } from "cn";
 import * as React from "react";
 import { alertDialogContentVariants, alertDialogStyles } from "@/components/ui/alert-dialog.styles";
-
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 function AlertDialog({ ...props }: AlertDialogPrimitive.Root.Props) {
   return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />;
@@ -56,7 +55,7 @@ function AlertDialogHeader({ className, ...props }: React.ComponentProps<"div">)
   return (
     <div
       data-slot="alert-dialog-header"
-      className={cn("grid gap-dialog-gap text-left", className)}
+      className={cn("grid gap-2 text-left", className)}
       {...props}
     />
   );

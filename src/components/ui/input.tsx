@@ -1,8 +1,8 @@
 import { Input as InputPrimitive } from "@base-ui/react/input";
 import { type VariantProps } from "class-variance-authority";
-import { cn } from "cn";
 import { type ComponentProps, type ReactNode } from "react";
 import { inputStyles, inputVariants } from "@/components/ui/input.styles";
+import { cn } from "@/lib/utils";
 
 type InputProps = Omit<ComponentProps<"input">, "size"> &
   VariantProps<typeof inputVariants> & {
@@ -17,7 +17,7 @@ function Input({ className, type, size, endAdornment, ...props }: InputProps) {
       {endAdornment != null && (
         <div
           data-slot="input-adornment"
-          className="flex shrink-0 items-center gap-1 pr-2.5 text-muted-foreground"
+          className="flex shrink-0 items-center gap-1 pr-3 text-muted-foreground"
         >
           {endAdornment}
         </div>

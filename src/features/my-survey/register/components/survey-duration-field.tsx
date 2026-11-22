@@ -1,10 +1,7 @@
 "use client";
 
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { FormField } from "@/components/common/form-field";
-import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
 import {
@@ -15,11 +12,13 @@ import { formatHelpTime } from "@/lib/format-help-time";
 
 export function SurveyDurationField() {
   const { control } = useFormContext<SurveyRegisterValues>();
-  const durationList = useRef<HTMLDivElement | null>(null);
 
-  function scrollDurations(direction: -1 | 1) {
-    const list = durationList.current;
-    if (list) list.scrollBy({ left: direction * list.clientWidth, behavior: "smooth" });
+  function handleSelectDuration(
+    selectedDurations: string[],
+    updateDuration: (minutes: number | "") => void,
+  ) {
+    const [selectedDuration] = selectedDurations;
+    updateDuration(selectedDuration === undefined ? "" : Number(selectedDuration));
   }
 
   return (
@@ -27,32 +26,19 @@ export function SurveyDurationField() {
       control={control}
       name="durationMinutes"
       label={REGISTER_MESSAGES.duration}
-      description={REGISTER_MESSAGES.durationHint}
       required
       render={({ field, controlProps }) => (
-        <div className="flex min-w-0 items-center gap-field-gap">
-          <div className="hidden md:block">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              aria-label={REGISTER_MESSAGES.previousDurations}
-              onClick={() => scrollDurations(-1)}
-            >
-              <ChevronLeftIcon />
-            </Button>
-          </div>
+        // 칩이 화면 폭을 넘으면 가로로 밀고, 오른쪽 끝은 흐리게 잘라 더 있음을 보여 준다
+        <div className="relative -mx-page-inset">
           <ToggleGroup
             {...controlProps}
-            ref={(list) => {
-              durationList.current = list;
-              field.ref(list);
-            }}
+            ref={field.ref}
+            size="chip"
+            className="scrollbar-none px-page-inset py-1.5"
             value={field.value === "" ? [] : [String(field.value)]}
-            onValueChange={(selectedDurations) => {
-              const selectedDuration = selectedDurations[0];
-              field.onChange(selectedDuration === undefined ? "" : Number(selectedDuration));
-            }}
+            onValueChange={(selectedDurations) =>
+              handleSelectDuration(selectedDurations, field.onChange)
+            }
             onBlur={field.onBlur}
           >
             {SURVEY_DURATION_MINUTES.map((minutes) => (
@@ -67,17 +53,10 @@ export function SurveyDurationField() {
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
-          <div className="hidden md:block">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              aria-label={REGISTER_MESSAGES.nextDurations}
-              onClick={() => scrollDurations(1)}
-            >
-              <ChevronRightIcon />
-            </Button>
-          </div>
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-linear-to-r from-transparent to-background"
+          />
         </div>
       )}
     />

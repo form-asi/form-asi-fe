@@ -7,6 +7,10 @@ export const buttonVariants = cva(
       fullWidth: { true: "w-full", false: "" },
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/80",
+        inverse:
+          "bg-inverse text-inverse-foreground hover:bg-inverse-hover active:bg-inverse-pressed disabled:border-transparent disabled:bg-inverse-disabled disabled:text-inverse-foreground",
+        negative:
+          "bg-negative text-primary-foreground hover:bg-negative-hover active:bg-negative-pressed",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
@@ -22,7 +26,7 @@ export const buttonVariants = cva(
           "h-control gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
         xs: "h-control-xs gap-1 rounded-md px-2 text-caption-lg in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-control-sm gap-1 rounded-md px-2.5 text-label-md in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-        lg: "h-control-lg gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
+        lg: "h-control-lg gap-1.5 px-5 text-label-lg font-semibold has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4",
         icon: "size-control",
         "icon-xs":
           "size-control-xs rounded-md in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",

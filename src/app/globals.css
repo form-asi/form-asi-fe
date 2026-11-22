@@ -35,12 +35,7 @@
   --spacing-app-bottom: var(--app-bottom-height);
   --spacing-cta-offset: var(--bottom-cta-offset);
   --spacing-cta-safe-bottom: var(--bottom-cta-safe-bottom);
-  --spacing-bottom-cta: calc(
-    var(--control-height-lg) +
-    var(--cta-inset) *
-    2 +
-    var(--layout-border-width)
-  );
+  --spacing-bottom-cta: calc(var(--control-height-lg) + var(--cta-inset) * 2);
   --spacing-app: var(--app-max-width);
   --spacing-header: var(--header-height);
   --spacing-tab-bar: var(--tab-bar-height);
@@ -70,6 +65,12 @@
   --color-cautionary: var(--foreground-cautionary-primary);
   --color-cautionary-subtle: var(--surface-cautionary-secondary);
   --color-inverse: var(--surface-inverse-primary);
+  --color-inverse-hover: var(--surface-inverse-primary-hover);
+  --color-inverse-pressed: var(--surface-inverse-primary-pressed);
+  --color-inverse-disabled: var(--surface-inverse-primary-disabled);
+  --color-negative: var(--surface-negative-primary);
+  --color-negative-hover: var(--surface-negative-primary-hover);
+  --color-negative-pressed: var(--surface-negative-primary-pressed);
   --color-inverse-foreground: var(--foreground-inverse-primary);
   --color-inverse-foreground-secondary: var(--foreground-inverse-secondary);
   --color-line-strong: var(--line-neutral-primary);
@@ -120,9 +121,9 @@
   --empty-state-inset-x: 0.625rem;
   --empty-state-inset-y: 1.375rem;
   --empty-state-action-width: 7.5rem;
-  --dialog-inset: 1rem;
-  --dialog-gap: 0.625rem;
-  --dialog-viewport-inset: 1.25rem;
+  --dialog-inset: 1.5rem;
+  --dialog-gap: 1.5rem;
+  --dialog-viewport-inset: 1.5rem;
   --dialog-max-width: 24rem;
   --dialog-max-width-sm: 16rem;
   --toast-radius: 9999px;
@@ -133,13 +134,13 @@
   );
   --toast-navigation-height: 0px;
   --toast-cta-height: 0px;
-  --field-gap: 0.25rem;
+  --field-gap: 0.375rem;
   --section-label-inset-x: 0.5rem;
   --section-label-inset-y: 0.25rem;
   --page-inset: 1rem;
-  --header-inset: 0.75rem;
+  --header-inset: 1rem;
   --layout-gap: 0.5rem;
-  --cta-inset: 0.625rem;
+  --cta-inset: 0.75rem;
   --layout-border-width: 1px;
   --app-bottom-height: env(safe-area-inset-bottom, 0px);
   --tab-bar-safe-height: calc(
@@ -150,7 +151,7 @@
   --bottom-cta-offset: 0px;
   --bottom-cta-safe-bottom: env(safe-area-inset-bottom, 0px);
   --app-max-width: 30rem;
-  --header-height: 2.75rem;
+  --header-height: 3rem;
   --tab-bar-height: 3rem;
   --control-height: 2.5rem;
   --control-height-sm: 2rem;
@@ -224,12 +225,7 @@
   }
 
   body:has([data-slot="bottom-cta"]) {
-    --toast-cta-height: calc(
-      var(--control-height-lg) +
-      var(--cta-inset) *
-      2 +
-      var(--layout-border-width)
-    );
+    --toast-cta-height: calc(var(--control-height-lg) + var(--cta-inset) * 2);
   }
 
   [data-slot="app-shell"][data-navigation="true"] {

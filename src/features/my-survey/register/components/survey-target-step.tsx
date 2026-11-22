@@ -1,14 +1,18 @@
 "use client";
 
 import { useFormContext, useWatch } from "react-hook-form";
-import { PROFILE_MESSAGES } from "@/components/domain/profile-form/profile-messages";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { SurveyAgeFields } from "@/features/my-survey/register/components/survey-age-fields";
 import { SurveyMultiSelectField } from "@/features/my-survey/register/components/survey-multi-select-field";
 import { SurveySection } from "@/features/my-survey/register/components/survey-section";
 import { SurveyTextField } from "@/features/my-survey/register/components/survey-text-field";
 import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
-import { type SurveyRegisterValues } from "@/features/my-survey/register/survey-register-schema";
+import {
+  createEmptyTarget,
+  type SurveyRegisterValues,
+  TARGET_AUDIENCES,
+  type TargetAudience,
+} from "@/features/my-survey/register/survey-register-schema";
 import * as options from "@/features/my-survey/register/survey-target-options";
 
 const BASIC_FIELDS = [
@@ -26,65 +30,107 @@ const LIVING_FIELDS = [
   { name: "petTypes", options: options.PET_TYPE_OPTIONS },
   { name: "drivingLicense", options: options.DRIVING_LICENSE_OPTIONS },
 ] as const;
+const AUDIENCE_LABELS = {
+  ANYONE: REGISTER_MESSAGES.audienceAnyone,
+  CONDITIONAL: REGISTER_MESSAGES.audienceConditional,
+} satisfies Record<TargetAudience, string>;
+
+function isTargetAudience(value: string | undefined): value is TargetAudience {
+  return TARGET_AUDIENCES.some((audience) => audience === value);
+}
+
+function toSelectedSummary(count: number) {
+  return count > 0 ? REGISTER_MESSAGES.selectedCount(count) : undefined;
+}
 
 export function SurveyTargetStep() {
-  const { control } = useFormContext<SurveyRegisterValues>();
+  const { control, setValue } = useFormContext<SurveyRegisterValues>();
   const target = useWatch({ control, name: "target" });
   const hasAgeRange = target.minimumAge !== "" || target.maximumAge !== "";
   const basicCount =
     Number(hasAgeRange) + BASIC_FIELDS.filter(({ name }) => target[name].length > 0).length;
   const livingCount = LIVING_FIELDS.filter(({ name }) => target[name].length > 0).length;
+
+  // "누구나"로 바꾸면 숨겨진 조건이 남아 등록되지 않도록 조건을 비운다
+  function handleChangeAudience(selectedAudiences: string[]) {
+    const [audience] = selectedAudiences;
+    if (!isTargetAudience(audience)) return;
+    if (audience === "ANYONE") {
+      setValue("target", createEmptyTarget(), { shouldDirty: true, shouldValidate: true });
+      return;
+    }
+    setValue("target.audience", audience, { shouldDirty: true });
+  }
+
   return (
-    <>
-      <SurveySection
-        title={REGISTER_MESSAGES.basicConditions}
-        summary={
-          basicCount ? REGISTER_MESSAGES.selectedCount(basicCount) : REGISTER_MESSAGES.noRestriction
-        }
+    <div className="flex flex-col gap-6">
+      <ToggleGroup
+        variant="segmented"
+        size="segmented"
+        className="w-full p-0"
+        value={[target.audience]}
+        onValueChange={handleChangeAudience}
       >
-        <SurveyAgeFields />
-        {BASIC_FIELDS.map(({ name, options: fieldOptions }) => (
-          <SurveyMultiSelectField
-            key={name}
-            name={`target.${name}`}
-            label={PROFILE_MESSAGES[name]}
-            options={fieldOptions}
-            placeholder={REGISTER_MESSAGES.noRestriction}
-          />
+        {TARGET_AUDIENCES.map((audience) => (
+          <ToggleGroupItem key={audience} value={audience}>
+            {AUDIENCE_LABELS[audience]}
+          </ToggleGroupItem>
         ))}
-      </SurveySection>
-      <SurveySection
-        title={REGISTER_MESSAGES.livingConditions}
-        summary={
-          livingCount
-            ? REGISTER_MESSAGES.selectedCount(livingCount)
-            : REGISTER_MESSAGES.noRestriction
-        }
-      >
-        {LIVING_FIELDS.map(({ name, options: fieldOptions }) => (
-          <SurveyMultiSelectField
-            key={name}
-            name={`target.${name}`}
-            label={PROFILE_MESSAGES[name]}
-            options={fieldOptions}
-            placeholder={REGISTER_MESSAGES.noRestriction}
-          />
-        ))}
-      </SurveySection>
-      <SurveySection
-        title={REGISTER_MESSAGES.targetDescription}
-        summary={target.description ? REGISTER_MESSAGES.hasInput : REGISTER_MESSAGES.noInput}
-      >
-        <SurveyTextField
-          name="target.description"
-          label={REGISTER_MESSAGES.targetDescription}
-          limit={200}
-          multiline
-        />
-      </SurveySection>
-      <Alert variant="notice">
-        <AlertDescription>{REGISTER_MESSAGES.targetHint}</AlertDescription>
-      </Alert>
-    </>
+      </ToggleGroup>
+      {target.audience === "CONDITIONAL" && (
+        <>
+          <div className="flex flex-col gap-2">
+            <p className="pl-0.5 text-caption-lg font-medium text-muted-foreground">
+              {REGISTER_MESSAGES.profileConditionHint}
+            </p>
+            <SurveySection
+              title={REGISTER_MESSAGES.basicConditions}
+              summary={toSelectedSummary(basicCount)}
+            >
+              <SurveyAgeFields />
+              {BASIC_FIELDS.map(({ name, options: fieldOptions }) => (
+                <SurveyMultiSelectField
+                  key={name}
+                  name={`target.${name}`}
+                  label={REGISTER_MESSAGES.targetLabels[name]}
+                  options={fieldOptions}
+                />
+              ))}
+            </SurveySection>
+            <SurveySection
+              title={REGISTER_MESSAGES.livingConditions}
+              summary={toSelectedSummary(livingCount)}
+            >
+              {LIVING_FIELDS.map(({ name, options: fieldOptions }) => (
+                <SurveyMultiSelectField
+                  key={name}
+                  name={`target.${name}`}
+                  label={REGISTER_MESSAGES.targetLabels[name]}
+                  options={fieldOptions}
+                />
+              ))}
+            </SurveySection>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="pl-0.5 text-caption-lg font-medium text-muted-foreground">
+              {REGISTER_MESSAGES.freeConditionHint}
+            </p>
+            <SurveySection
+              title={REGISTER_MESSAGES.targetDescription}
+              summary={target.description ? REGISTER_MESSAGES.hasInput : undefined}
+            >
+              <SurveyTextField
+                name="target.description"
+                label={REGISTER_MESSAGES.targetDescription}
+                placeholder={REGISTER_MESSAGES.targetDescriptionPlaceholder}
+                limit={200}
+                multiline
+                hideLabel
+              />
+            </SurveySection>
+          </div>
+        </>
+      )}
+    </div>
   );
 }
