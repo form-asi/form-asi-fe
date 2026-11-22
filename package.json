@@ -10,7 +10,8 @@
     "lint:fix": "eslint --fix",
     "format": "biome check --write",
     "typecheck": "next typegen && tsc --noEmit",
-    "check": "biome check && eslint && next typegen && tsc --noEmit",
+    "check": "biome check && eslint && next typegen && tsc --noEmit && bun scripts/build-tokens.ts --check",
+    "tokens:build": "bun scripts/build-tokens.ts",
     "test": "bun test",
     "api:gen": "orval",
     "prepare": "husky"
@@ -41,6 +42,7 @@
     "@tailwindcss/turbopack": "4.3.3",
     "@tanstack/eslint-plugin-query": "^5.107.1",
     "@tanstack/react-query-devtools": "^5.107.1",
+    "@tokens-studio/sd-transforms": "^2.0.3",
     "@types/bun": "^1.4.4",
     "@types/node": "^22",
     "@types/react": "^19",
@@ -51,6 +53,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "orval": "^8.48.0",
+    "style-dictionary": "^5.8.0",
     "tailwindcss": "4.3.3",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.72.2"

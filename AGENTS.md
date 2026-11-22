@@ -26,6 +26,7 @@ Users answer surveys to earn "help time" and spend it to collect responses for t
 - `bun run check`: Biome format check + ESLint + typecheck. Run it before reporting completion.
 - `bun run format`: Biome format + import sorting
 - `bun run api:gen`: regenerate the API client with Orval. Never edit `src/api/generated/` by hand.
+- `bun run tokens:build`: regenerate `src/app/tokens.generated.css` from `tokens/tokens.json` (Tokens Studio). Never edit the generated file by hand.
 - `bunx shadcn add <component>`: add shadcn components into `src/components/ui/`
 
 ## Project structure
