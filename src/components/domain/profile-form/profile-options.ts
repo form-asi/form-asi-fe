@@ -1,7 +1,7 @@
 // shortcut: 백엔드 enum 미확정에 따른 임시 코드, API 명세 확정 후 Orval 타입으로 교체
 export const GENDER_OPTIONS = [
-  { value: "MALE", label: "남" },
-  { value: "FEMALE", label: "여" },
+  { value: "MALE", label: "남자" },
+  { value: "FEMALE", label: "여자" },
 ] as const;
 
 export const FIELD_OPTIONS = [

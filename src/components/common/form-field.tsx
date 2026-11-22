@@ -8,6 +8,8 @@ import {
   type UseControllerProps,
   useController,
 } from "react-hook-form";
+import CircleCheckFillIcon from "@/assets/icons/circle-check-fill.svg";
+import CircleExclamationFillIcon from "@/assets/icons/circle-exclamation-fill.svg";
 import { UI_MESSAGES } from "@/lib/ui-messages";
 import { cn } from "@/lib/utils";
 
@@ -127,12 +129,33 @@ function FormField<
         },
       })}
       {errorMessage && (
-        <p id={errorId} role="alert" className="text-caption-lg text-destructive">
+        <FieldMessage id={errorId} tone="error">
           {errorMessage}
-        </p>
+        </FieldMessage>
       )}
     </div>
   );
 }
 
-export { FormField };
+type FieldMessageProps = { id: string; tone: "error" | "success"; children: ReactNode };
+
+/** @description 입력칸 아래 오류·성공 문구. FormField 밖에서 확인 결과(예: 닉네임 중복 확인)를 보여줄 때도 사용 */
+function FieldMessage({ id, tone, children }: FieldMessageProps) {
+  const isError = tone === "error";
+  const Icon = isError ? CircleExclamationFillIcon : CircleCheckFillIcon;
+  return (
+    <p
+      id={id}
+      role={isError ? "alert" : "status"}
+      className={cn(
+        "flex items-start gap-1 text-caption-lg",
+        isError ? "text-destructive" : "text-positive",
+      )}
+    >
+      <Icon aria-hidden="true" className="size-4 shrink-0" />
+      {children}
+    </p>
+  );
+}
+
+export { FieldMessage, FormField };

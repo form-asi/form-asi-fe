@@ -1,7 +1,6 @@
 "use client";
 
 import { useFormContext, useWatch } from "react-hook-form";
-import { SectionLabel } from "@/components/common/section-label";
 import { PROFILE_MESSAGES } from "./profile-messages";
 import {
   CHILDREN_OPTIONS,
@@ -23,9 +22,6 @@ export function ProfileOptionalFields() {
 
   return (
     <>
-      <SectionLabel description={PROFILE_MESSAGES.optionalDescription}>
-        {PROFILE_MESSAGES.optional}
-      </SectionLabel>
       <ProfileSelectField name="region" label={PROFILE_MESSAGES.region} options={REGION_OPTIONS} />
       <ProfileSelectField
         name="household"
@@ -59,7 +55,6 @@ export function ProfileOptionalFields() {
           name="petTypes"
           label={PROFILE_MESSAGES.petTypes}
           options={PET_TYPE_OPTIONS}
-          labelHint={PROFILE_MESSAGES.petTypesHint}
           multiple
         />
       )}

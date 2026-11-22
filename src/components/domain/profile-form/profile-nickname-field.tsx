@@ -2,7 +2,7 @@
 
 import { useId } from "react";
 import { useFormContext } from "react-hook-form";
-import { FormField } from "@/components/common/form-field";
+import { FieldMessage, FormField } from "@/components/common/form-field";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PROFILE_MESSAGES } from "./profile-messages";
@@ -34,7 +34,6 @@ export function ProfileNicknameField({
       name="nickname"
       label={PROFILE_MESSAGES.nickname}
       required
-      description={PROFILE_MESSAGES.nicknameHint}
       render={({ field, controlProps }) => (
         <>
           <Input
@@ -55,8 +54,9 @@ export function ProfileNicknameField({
             endAdornment={
               <Button
                 type="button"
-                variant="outline"
+                variant="inverse"
                 size="xs"
+                className="rounded-sm px-2.5"
                 disabled={
                   isChecking ||
                   isNicknameConfirmed ||
@@ -70,17 +70,9 @@ export function ProfileNicknameField({
             }
           />
           {statusMessage && (
-            <p
-              id={statusId}
-              role={hasCheckError ? "alert" : "status"}
-              className={
-                hasCheckError
-                  ? "text-caption-lg text-destructive"
-                  : "text-caption-lg text-muted-foreground"
-              }
-            >
+            <FieldMessage id={statusId} tone={hasCheckError ? "error" : "success"}>
               {statusMessage}
-            </p>
+            </FieldMessage>
           )}
         </>
       )}

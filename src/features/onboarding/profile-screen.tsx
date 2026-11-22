@@ -2,7 +2,6 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { AppHeader } from "@/components/common/app-header";
 import { EmptyState } from "@/components/common/empty-state";
 import {
   checkNicknameMock,
@@ -15,6 +14,7 @@ import {
   createEmptyProfile,
   type ProfileValues,
 } from "@/components/domain/profile-form/profile-schema";
+import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/routes";
 import { UI_MESSAGES } from "@/lib/ui-messages";
 
@@ -30,7 +30,21 @@ export function OnboardingProfileScreen() {
     router.replace(ROUTES.explore);
   }
 
-  const header = <AppHeader title={PROFILE_MESSAGES.createTitle} />;
+  const header = (
+    <header className="flex min-h-header items-center gap-2 bg-background pr-3 pl-5">
+      <h1 className="min-w-0 flex-1 truncate text-title-md font-semibold">
+        {PROFILE_MESSAGES.createTitle}
+      </h1>
+      <Button
+        type="button"
+        variant="ghost"
+        className="h-10 px-2 text-foreground-secondary"
+        onClick={() => router.replace(ROUTES.explore)}
+      >
+        {PROFILE_MESSAGES.skip}
+      </Button>
+    </header>
+  );
   if (profileAgeQuery.isPending) {
     return (
       <>
@@ -64,7 +78,6 @@ export function OnboardingProfileScreen() {
       {header}
       <ProfileForm
         initialProfile={createEmptyProfile(profileAgeQuery.data)}
-        intro={PROFILE_MESSAGES.createIntro}
         submitLabel={PROFILE_MESSAGES.start}
         checkNickname={checkNicknameMock}
         onSaveProfile={handleStartWithProfile}
