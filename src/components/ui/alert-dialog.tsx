@@ -56,7 +56,7 @@ function AlertDialogHeader({ className, ...props }: React.ComponentProps<"div">)
   return (
     <div
       data-slot="alert-dialog-header"
-      className={cn("grid gap-dialog-gap text-left", className)}
+      className={cn("grid gap-2 text-left", className)}
       {...props}
     />
   );

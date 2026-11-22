@@ -1,7 +1,6 @@
 import { cn } from "cn";
-import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { badgeVariants } from "@/components/ui/badge.styles";
+import { ChevronRightIcon } from "@/components/icons";
 import { formatHelpTime } from "@/lib/format-help-time";
 import { ROUTES } from "@/lib/routes";
 import { UI_MESSAGES } from "@/lib/ui-messages";
@@ -16,15 +15,20 @@ function HelpTimeChip({ helpTimeBalance }: HelpTimeChipProps) {
     <Link
       href={ROUTES.helpTime}
       data-slot="help-time-chip"
-      className={cn(
-        badgeVariants({
-          variant: helpTimeBalance < 0 ? "destructive-outline" : "muted-outline",
-          size: "chip",
-        }),
-      )}
+      className="flex shrink-0 items-center rounded-full py-1.5 pr-1.5 pl-2 text-foreground-quaternary"
     >
-      {UI_MESSAGES.helpTime} {formatHelpTime(helpTimeBalance)}
-      <ChevronRight aria-hidden="true" />
+      <span className="flex items-end gap-1">
+        <span className="text-emphasis-caption-sm">{UI_MESSAGES.myHelpTime}</span>
+        <span
+          className={cn(
+            "text-emphasis-label-md",
+            helpTimeBalance < 0 ? "text-destructive" : "text-brand",
+          )}
+        >
+          {formatHelpTime(helpTimeBalance)}
+        </span>
+      </span>
+      <ChevronRightIcon />
     </Link>
   );
 }

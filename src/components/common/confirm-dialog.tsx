@@ -95,7 +95,6 @@ function ConfirmDialog({
       }}
     >
       <AlertDialogContent
-        size="sm"
         initialFocus={cancelButtonRef}
         aria-busy={isPending}
         onBackdropClick={() => {

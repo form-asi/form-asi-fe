@@ -17,7 +17,7 @@ function Input({ className, type, size, endAdornment, ...props }: InputProps) {
       {endAdornment != null && (
         <div
           data-slot="input-adornment"
-          className="flex shrink-0 items-center gap-1 pr-2.5 text-muted-foreground"
+          className="flex shrink-0 items-center gap-1 pr-3 text-muted-foreground"
         >
           {endAdornment}
         </div>

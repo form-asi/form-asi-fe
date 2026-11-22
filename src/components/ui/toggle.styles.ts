@@ -6,7 +6,9 @@ export const toggleVariants = cva(
     variants: {
       variant: {
         default: "bg-transparent data-pressed:bg-muted",
-        chip: "rounded-full border border-input bg-background data-pressed:border-primary data-pressed:bg-primary data-pressed:text-primary-foreground",
+        chip: "h-control-sm rounded-full bg-secondary px-3 text-label-lg text-secondary-foreground hover:bg-secondary-hover data-pressed:bg-inverse data-pressed:text-inverse-foreground",
+        segmented:
+          "h-11 flex-1 rounded-lg border border-border bg-background px-5 text-label-lg text-foreground hover:bg-muted data-pressed:border-primary data-pressed:bg-primary data-pressed:font-semibold data-pressed:text-primary-foreground",
         outline: "border border-input bg-transparent hover:bg-muted data-pressed:bg-muted",
       },
       size: {

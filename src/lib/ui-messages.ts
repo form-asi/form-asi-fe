@@ -3,9 +3,11 @@ export const UI_MESSAGES = {
   back: "뒤로 가기",
   mainNavigation: "주요 메뉴",
   optionalField: "선택",
+  selectPlaceholder: "선택",
+  done: "완료",
   invalidField: "입력 내용을 확인해 주세요",
   notifications: "알림",
-  helpTime: "도움 시간",
+  myHelpTime: "내 도움시간",
   helpTimeUnit: "분",
   retry: "다시 시도",
   toast: {
