@@ -69,7 +69,6 @@ export function EditProfileScreen() {
         initialProfile={currentProfileQuery.data}
         confirmedNickname={currentProfileQuery.data.nickname}
         requireChanges
-        intro={PROFILE_MESSAGES.editIntro}
         submitLabel={PROFILE_MESSAGES.save}
         checkNickname={checkNicknameMock}
         onSaveProfile={handleSaveProfile}

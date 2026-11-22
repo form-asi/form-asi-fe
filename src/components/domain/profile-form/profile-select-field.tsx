@@ -2,14 +2,8 @@
 
 import { useFormContext, useWatch } from "react-hook-form";
 import { FormField } from "@/components/common/form-field";
+import { SelectSheet } from "@/components/common/select-sheet";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { PROFILE_MESSAGES } from "./profile-messages";
 import { type ProfileValues } from "./profile-schema";
 
@@ -30,7 +24,6 @@ type ProfileSelectFieldProps = {
   label: string;
   options: readonly ProfileOption[];
   required?: boolean;
-  labelHint?: string;
   otherFieldName?: OtherFieldName;
 } & (
   | { name: SingleSelectName; multiple?: false }
@@ -62,15 +55,6 @@ export function ProfileSelectField(props: ProfileSelectFieldProps) {
     props.required || props.multiple
       ? props.options
       : [{ value: "", label: PROFILE_MESSAGES.clearSelection }, ...props.options];
-  const selectOptions = (
-    <SelectContent>
-      {options.map((option) => (
-        <SelectItem key={option.value} value={option.value}>
-          {option.label}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  );
 
   return (
     <div className="flex flex-col gap-layout-gap">
@@ -80,13 +64,17 @@ export function ProfileSelectField(props: ProfileSelectFieldProps) {
           name={props.name}
           label={props.label}
           required={props.required}
-          labelHint={props.labelHint}
+          showOptionalTag={false}
           render={({ field, controlProps }) => (
-            <Select<string, true>
-              multiple
-              value={field.value}
-              items={options}
+            <SelectSheet
+              {...controlProps}
+              ref={field.ref}
+              onBlur={field.onBlur}
               disabled={formState.isSubmitting}
+              multiple
+              title={props.label}
+              options={options}
+              value={field.value}
               onValueChange={(selectedCodes) => {
                 const orderedCodes = options
                   .filter((option) => selectedCodes.includes(option.value))
@@ -94,12 +82,7 @@ export function ProfileSelectField(props: ProfileSelectFieldProps) {
                 field.onChange(orderedCodes);
                 clearHiddenFields(orderedCodes);
               }}
-            >
-              <SelectTrigger ref={field.ref} onBlur={field.onBlur} {...controlProps}>
-                <SelectValue placeholder={PROFILE_MESSAGES.selectPlaceholder} />
-              </SelectTrigger>
-              {selectOptions}
-            </Select>
+            />
           )}
         />
       ) : (
@@ -108,22 +91,21 @@ export function ProfileSelectField(props: ProfileSelectFieldProps) {
           name={props.name}
           label={props.label}
           required={props.required}
-          labelHint={props.labelHint}
+          showOptionalTag={false}
           render={({ field, controlProps }) => (
-            <Select<string>
-              value={field.value || null}
-              items={options}
+            <SelectSheet
+              {...controlProps}
+              ref={field.ref}
+              onBlur={field.onBlur}
               disabled={formState.isSubmitting}
+              title={props.label}
+              options={options}
+              value={field.value}
               onValueChange={(selectedCode) => {
-                field.onChange(selectedCode ?? "");
-                clearHiddenFields(selectedCode ?? "");
+                field.onChange(selectedCode);
+                clearHiddenFields(selectedCode);
               }}
-            >
-              <SelectTrigger ref={field.ref} onBlur={field.onBlur} {...controlProps}>
-                <SelectValue placeholder={PROFILE_MESSAGES.selectPlaceholder} />
-              </SelectTrigger>
-              {selectOptions}
-            </Select>
+            />
           )}
         />
       )}

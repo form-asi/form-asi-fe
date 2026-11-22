@@ -16,8 +16,9 @@ import {
 
 export const nicknameSchema = z
   .string()
-  .min(2, PROFILE_MESSAGES.nicknameLength)
-  .max(10, PROFILE_MESSAGES.nicknameLength)
+  .min(1, PROFILE_MESSAGES.requiredField)
+  .min(2, PROFILE_MESSAGES.nicknameTooShort)
+  .max(10, PROFILE_MESSAGES.nicknameTooLong)
   .regex(/^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]+$/, PROFILE_MESSAGES.nicknameCharacters);
 
 const otherTextSchema = z.string().max(20, PROFILE_MESSAGES.otherTooLong);

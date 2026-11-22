@@ -16,7 +16,6 @@ type ProfileFormProps = {
   initialProfile: ProfileValues;
   confirmedNickname?: string;
   requireChanges?: boolean;
-  intro: string;
   submitLabel: string;
   checkNickname: (nickname: string) => Promise<{ available: boolean }>;
   onSaveProfile: (profile: ProfileValues) => Promise<void>;
@@ -27,7 +26,6 @@ export function ProfileForm({
   initialProfile,
   confirmedNickname,
   requireChanges = false,
-  intro,
   submitLabel,
   checkNickname,
   onSaveProfile,
@@ -74,10 +72,16 @@ export function ProfileForm({
   return (
     <FormProvider {...form}>
       <form id={formId} onSubmit={handleSubmitProfile} noValidate>
-        <fieldset disabled={isSubmitting} className="flex min-w-0 flex-col gap-3 p-page-inset">
-          <Alert variant="notice" role="note">
-            <AlertDescription>{intro}</AlertDescription>
-          </Alert>
+        <fieldset
+          disabled={isSubmitting}
+          className="flex min-w-0 flex-col gap-4 px-page-inset pt-2 pb-10"
+        >
+          <p
+            role="note"
+            className="rounded-sm bg-cautionary-subtle p-3 text-caption-lg font-medium text-cautionary"
+          >
+            {PROFILE_MESSAGES.intro}
+          </p>
           <ProfileNicknameField
             nicknameVerification={nicknameVerification}
             isNicknameConfirmed={isNicknameConfirmed}
