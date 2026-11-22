@@ -65,10 +65,11 @@ function FormField<
   const errorMessage = fieldState.invalid
     ? fieldState.error?.message || UI_MESSAGES.invalidField
     : undefined;
+  const showDescription = Boolean(description) && description !== errorMessage;
   const describedBy =
     [
       labelHint ? hintId : undefined,
-      description ? descriptionId : undefined,
+      showDescription ? descriptionId : undefined,
       errorMessage ? errorId : undefined,
     ]
       .filter(Boolean)
@@ -109,7 +110,7 @@ function FormField<
           "aria-required": required,
         },
       })}
-      {description && (
+      {showDescription && (
         <p id={descriptionId} className="text-caption-lg text-muted-foreground">
           {description}
         </p>
