@@ -16,7 +16,6 @@ export function SurveyInfoStep() {
         control={control}
         name="surveyUrl"
         label={REGISTER_MESSAGES.surveyUrl}
-        description={REGISTER_MESSAGES.surveyUrlError}
         required
         render={({ field, controlProps }) => (
           <Input

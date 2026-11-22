@@ -10,5 +10,5 @@ export const inputVariants = cva(
 
 export const inputStyles = {
   control:
-    "size-full min-w-0 flex-1 rounded-lg bg-transparent px-2.5 py-1 outline-none file:border-0 file:bg-transparent placeholder:text-muted-foreground disabled:cursor-not-allowed",
+    "size-full min-w-0 flex-1 rounded-lg bg-transparent px-2.5 py-1 outline-none file:border-0 file:bg-transparent placeholder:text-muted-foreground autofill:bg-clip-text disabled:cursor-not-allowed",
 } as const;
