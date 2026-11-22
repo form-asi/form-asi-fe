@@ -3,7 +3,8 @@
 import { Drawer } from "@base-ui/react/drawer";
 import { cn } from "cn";
 import { type ComponentProps, useState } from "react";
-import { CheckIcon, ChevronDownIcon } from "@/components/icons";
+import CheckIcon from "@/assets/icons/check.svg";
+import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
 import { Button } from "@/components/ui/button";
 import { UI_MESSAGES } from "@/lib/ui-messages";
 

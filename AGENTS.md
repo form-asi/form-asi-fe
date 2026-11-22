@@ -39,6 +39,7 @@ Users answer surveys to earn "help time" and spend it to collect responses for t
 - `src/components/common/`: service-wide UI compositions (AppHeader, TabBar, BottomSheet, FormField).
 - `src/components/domain/`: domain UI shared across features (HelpTimeBar `C-01`, SurveyCard `C-02`). Keep it flat: a component group gets one folder with its files side by side, without the `components/`·`hooks/`·`lib/` split used in features.
 - `src/api/`: Orval output and `fetcher.ts`.
+- `src/assets/icons/`: SVG files exported from Figma as-is. Import them as React components (`import ArrowLeftIcon from "@/assets/icons/arrow-left.svg"`); SVGR converts colors to `currentColor`, so set color with text utilities.
 - `src/lib/`, `src/hooks/`, `src/providers/`: shared utilities, hooks, and providers.
 - Design tokens live in `src/app/globals.css` (`@theme`). Never hardcode colors or spacing values.
 

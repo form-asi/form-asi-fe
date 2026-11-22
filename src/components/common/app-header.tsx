@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { type ReactNode } from "react";
-import { ArrowLeftIcon } from "@/components/icons";
+import ArrowLeftIcon from "@/assets/icons/arrow-left.svg";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { UI_MESSAGES } from "@/lib/ui-messages";
 
