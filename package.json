@@ -13,7 +13,7 @@
     "check": "biome check && eslint && next typegen && tsc --noEmit && bun scripts/build-tokens.ts --check",
     "tokens:build": "bun scripts/build-tokens.ts",
     "test": "bun test",
-    "api:gen": "orval",
+    "api:gen": "bunx --bun orval@8.48.0",
     "prepare": "husky"
   },
   "dependencies": {
