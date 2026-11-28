@@ -23,6 +23,11 @@ export function setAccessToken(token: string | null) {
   accessToken = token;
 }
 
+/** @description 토큰 값을 노출하지 않고 브라우저 세션 복구 필요 여부를 확인한다. */
+export function hasAccessToken() {
+  return typeof window !== "undefined" && accessToken !== null;
+}
+
 async function request(url: string, options?: RequestInit) {
   return fetch(`${BASE_URL}${url}`, {
     ...options,

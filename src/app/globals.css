@@ -7,6 +7,9 @@
 
 @theme {
   --spacing: 0.25rem;
+  --text-kakao-label: 1.0625rem;
+  --text-kakao-label--line-height: 1.24;
+  --text-kakao-label--letter-spacing: -0.02em;
 }
 
 @theme inline {
@@ -61,6 +64,8 @@
   --color-foreground-quaternary: var(--foreground-neutral-quaternary);
   --color-brand: var(--surface-brand-primary);
   --color-brand-subtle: var(--surface-brand-secondary);
+  --color-kakao: var(--kakao-background);
+  --color-kakao-foreground: var(--kakao-foreground);
   --color-positive: var(--foreground-positive-primary);
   --color-cautionary: var(--foreground-cautionary-primary);
   --color-cautionary-subtle: var(--surface-cautionary-secondary);
@@ -187,6 +192,9 @@
   --ring: var(--surface-brand-primary);
 
   /* 프로젝트 고유 토큰 */
+  --kakao-background: #fee500;
+  --kakao-foreground: #333333;
+  --kakao-button-height: 3.3125rem;
   --overlay: var(--surface-dim-primary);
   --disabled: var(--surface-neutral-primary);
   --disabled-foreground: var(--foreground-neutral-quaternary);
@@ -211,6 +219,11 @@
 }
 
 @layer components {
+  body:has([data-slot="kakao-login"]),
+  [data-slot="app-shell"]:has([data-slot="kakao-login"]) {
+    background-color: var(--surface-brand-primary);
+  }
+
   body {
     --toast-bottom-offset: calc(
       env(safe-area-inset-bottom, 0px) +
