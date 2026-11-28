@@ -1,6 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
+import { Loader2Icon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
 import { setAccessToken } from "@/api/fetcher";
@@ -41,9 +42,10 @@ export function AuthGate({ children }: { children: ReactNode }) {
 
   if (authState.kind === "checking" || redirectTo) {
     return (
-      <p role="status" className="p-page-inset text-body-sm text-muted-foreground">
-        {UI_MESSAGES.checkingSession}
-      </p>
+      <div role="status" className="flex min-h-dvh items-center justify-center">
+        <Loader2Icon aria-hidden="true" className="size-6 animate-spin text-muted-foreground" />
+        <span className="sr-only">{UI_MESSAGES.checkingSession}</span>
+      </div>
     );
   }
   if (authState.kind === "error") {

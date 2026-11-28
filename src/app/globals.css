@@ -233,11 +233,17 @@
     );
   }
 
-  body:has([data-slot="app-shell"][data-navigation="true"]) {
+  /* Activity가 숨겨 둔 이전 화면은 토스트 여백 계산에서 제외한다. */
+  body:has(
+    [data-slot="app-shell"][data-navigation="true"]:not(
+        [style*="display: none"],
+        [style*="display: none"] *
+      )
+  ) {
     --toast-navigation-height: calc(var(--tab-bar-height) + var(--layout-border-width));
   }
 
-  body:has([data-slot="bottom-cta"]) {
+  body:has([data-slot="bottom-cta"]:not([style*="display: none"], [style*="display: none"] *)) {
     --toast-cta-height: calc(var(--control-height-lg) + var(--cta-inset) * 2);
   }
 

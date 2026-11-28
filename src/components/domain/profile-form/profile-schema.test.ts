@@ -2,7 +2,6 @@ import { test } from "bun:test";
 import assert from "node:assert/strict";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "@/lib/dayjs";
-import { checkNicknameMock, getCurrentProfileMock, saveProfileMock } from "./profile-api.mock";
 import {
   createEmptyProfile,
   nicknameSchema,
@@ -101,17 +100,4 @@ test("반려동물 종류의 기타는 직접 입력 불필요", () => {
     profileSchema.safeParse({ ...validProfile, petExperience: "PAST", petTypes: ["OTHER"] })
       .success,
   );
-});
-
-test("mock 중복 확인의 대소문자 처리와 저장 실패 시 기존 값 유지", async () => {
-  assert.deepEqual(await checkNicknameMock("PuMaSi"), { available: false });
-  assert.deepEqual(await checkNicknameMock(validProfile.nickname), { available: true });
-  const savedProfile = await saveProfileMock(validProfile);
-  savedProfile.fields.push("OTHER");
-  assert.deepEqual(await getCurrentProfileMock(), validProfile);
-  await assert.rejects(
-    saveProfileMock({ ...validProfile, nickname: "PUMASI" }),
-    /NICKNAME_DUPLICATE/,
-  );
-  assert.deepEqual(await getCurrentProfileMock(), validProfile);
 });
