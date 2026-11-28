@@ -1,4 +1,5 @@
 export const UI_MESSAGES = {
+  checkingSession: "로그인 상태를 확인하고 있어요",
   comingSoon: "준비 중",
   back: "뒤로 가기",
   mainNavigation: "주요 메뉴",
