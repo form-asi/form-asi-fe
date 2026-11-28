@@ -1,23 +1,23 @@
 import { z } from "zod";
 import {
+  OnboardingRequestChildrenCount,
+  OnboardingRequestDriverLicense,
+  OnboardingRequestFieldsItem,
+  OnboardingRequestGender,
+  OnboardingRequestHouseholdComposition,
+  OnboardingRequestHouseholdSize,
+  OnboardingRequestMaritalStatus,
+  OnboardingRequestOccupation,
+  OnboardingRequestPetExperience,
+  OnboardingRequestPetsItem,
+  OnboardingRequestRegion,
+} from "@/api/generated/models";
+import {
   ETC_OPTION_VALUE,
   SURVEY_FORMAT_OPTIONS,
   SURVEY_PURPOSE_OPTIONS,
 } from "@/features/my-survey/register/survey-info-options";
 import { SURVEY_REGISTER_MESSAGES as REGISTER_MESSAGES } from "@/features/my-survey/register/survey-register-messages";
-import {
-  CHILDREN_OPTIONS,
-  DRIVING_LICENSE_OPTIONS,
-  FIELD_OPTIONS,
-  GENDER_OPTIONS,
-  HOUSEHOLD_OPTIONS,
-  HOUSEHOLD_SIZE_OPTIONS,
-  MARITAL_STATUS_OPTIONS,
-  OCCUPATION_OPTIONS,
-  PET_EXPERIENCE_OPTIONS,
-  PET_TYPE_OPTIONS,
-  REGION_OPTIONS,
-} from "@/features/my-survey/register/survey-target-options";
 
 // shortcut: 디자인에 1~20분까지만 보여 30분 이후는 기존 목록 유지, 기획 확정 후 갱신
 export const SURVEY_DURATION_MINUTES = [1, 3, 5, 10, 15, 20, 30, 40, 50, 60] as const;
@@ -70,17 +70,27 @@ const targetSchema = z
     audience: z.enum(TARGET_AUDIENCES),
     minimumAge: optionalAge,
     maximumAge: optionalAge,
-    gender: z.array(z.enum(GENDER_OPTIONS.map((option) => option.value))),
-    occupation: z.array(z.enum(OCCUPATION_OPTIONS.map((option) => option.value))),
-    fields: z.array(z.enum(FIELD_OPTIONS.map((option) => option.value))),
-    region: z.array(z.enum(REGION_OPTIONS.map((option) => option.value))),
-    household: z.array(z.enum(HOUSEHOLD_OPTIONS.map((option) => option.value))),
-    householdSize: z.array(z.enum(HOUSEHOLD_SIZE_OPTIONS.map((option) => option.value))),
-    maritalStatus: z.array(z.enum(MARITAL_STATUS_OPTIONS.map((option) => option.value))),
-    children: z.array(z.enum(CHILDREN_OPTIONS.map((option) => option.value))),
-    petExperience: z.array(z.enum(PET_EXPERIENCE_OPTIONS.map((option) => option.value))),
-    petTypes: z.array(z.enum(PET_TYPE_OPTIONS.map((option) => option.value))),
-    drivingLicense: z.array(z.enum(DRIVING_LICENSE_OPTIONS.map((option) => option.value))),
+    gender: z.array(z.enum(OnboardingRequestGender)),
+    occupation: z.array(
+      z.enum(OnboardingRequestOccupation).exclude([OnboardingRequestOccupation.OTHER]),
+    ),
+    fields: z.array(
+      z.enum(OnboardingRequestFieldsItem).exclude([OnboardingRequestFieldsItem.OTHER]),
+    ),
+    region: z.array(z.enum(OnboardingRequestRegion)),
+    household: z.array(
+      z
+        .enum(OnboardingRequestHouseholdComposition)
+        .exclude([OnboardingRequestHouseholdComposition.OTHER]),
+    ),
+    householdSize: z.array(z.enum(OnboardingRequestHouseholdSize)),
+    maritalStatus: z.array(
+      z.enum(OnboardingRequestMaritalStatus).exclude([OnboardingRequestMaritalStatus.OTHER]),
+    ),
+    children: z.array(z.enum(OnboardingRequestChildrenCount)),
+    petExperience: z.array(z.enum(OnboardingRequestPetExperience)),
+    petTypes: z.array(z.enum(OnboardingRequestPetsItem).exclude([OnboardingRequestPetsItem.OTHER])),
+    drivingLicense: z.array(z.enum(OnboardingRequestDriverLicense)),
     description: z.string().max(200, REGISTER_MESSAGES.lengthError(200)),
   })
   .superRefine((target, context) => {
@@ -98,7 +108,10 @@ const targetSchema = z
   });
 
 export const surveyRegisterSchema = z.object({
-  surveyUrl: z.string().startsWith("https://", REGISTER_MESSAGES.surveyUrlError),
+  surveyUrl: z
+    .string()
+    .startsWith("https://", REGISTER_MESSAGES.surveyUrlError)
+    .pipe(z.url({ protocol: /^https$/, error: REGISTER_MESSAGES.surveyUrlError })),
   purpose: choiceWithEtc(SURVEY_PURPOSE_OPTIONS),
   format: choiceWithEtc(SURVEY_FORMAT_OPTIONS),
   target: targetSchema,

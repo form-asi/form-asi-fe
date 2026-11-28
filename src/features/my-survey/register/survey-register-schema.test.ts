@@ -1,9 +1,6 @@
 import { test } from "bun:test";
 import assert from "node:assert/strict";
-import {
-  getHelpTimeBalanceMock,
-  publishSurveyMock,
-} from "@/features/my-survey/register/mocks/survey-register-api.mock";
+
 import {
   createEmptySurvey,
   isSurveyStepValid,
@@ -16,7 +13,7 @@ const validSurvey: SurveyRegisterValues = {
   ...createEmptySurvey(),
   surveyUrl: "https://example.com/survey",
   purpose: { code: "ACADEMIC_RESEARCH", etcText: "" },
-  format: { code: "SIMPLE_CHOICE", etcText: "" },
+  format: { code: "MULTIPLE_CHOICE", etcText: "" },
   title: "테스트 설문",
   description: "설문 소개",
   respondentCount: 5,
@@ -26,8 +23,8 @@ const validSurvey: SurveyRegisterValues = {
 test("단계 검증은 뒤 단계의 미입력과 독립적", () => {
   const draft = {
     ...createEmptySurvey(),
-    surveyUrl: "https://",
-    purpose: { code: "ETC", etcText: "졸업 프로젝트" },
+    surveyUrl: "https://example.com/survey",
+    purpose: { code: "OTHER", etcText: "졸업 프로젝트" },
     format: { code: "OPEN_ENDED", etcText: "" },
   };
   assert.ok(isSurveyStepValid("info", draft));
@@ -36,6 +33,28 @@ test("단계 검증은 뒤 단계의 미입력과 독립적", () => {
   assert.equal(isSurveyStepValid("scale", draft), false);
   assert.equal(isSurveyStepValid("info", { ...draft, surveyUrl: "http://example.com" }), false);
   assert.equal(isSurveyStepValid("info", { ...draft, purpose: { code: "", etcText: "" } }), false);
+});
+
+test("외부 설문 링크에는 호스트가 있는 HTTPS URL이 필요", () => {
+  for (const surveyUrl of [
+    "",
+    "https://",
+    "https://?query",
+    "http://example.com",
+    "https://bad host",
+  ]) {
+    assert.equal(
+      surveyRegisterSchema.safeParse({ ...validSurvey, surveyUrl }).success,
+      false,
+      surveyUrl,
+    );
+  }
+  assert.ok(
+    surveyRegisterSchema.safeParse({
+      ...validSurvey,
+      surveyUrl: "https://forms.example.com/view?id=1",
+    }).success,
+  );
 });
 
 test("나이 범위·한쪽 입력·역전 검증과 오류 경로", () => {
@@ -83,9 +102,9 @@ test("목적·형식은 하나 필수, 기타는 직접 입력 필수(공백 포
       surveyRegisterSchema.safeParse({ ...validSurvey, [field]: { code, etcText } }).success;
     assert.equal(parseChoice("", ""), false);
     assert.equal(parseChoice("UNKNOWN", ""), false);
-    assert.equal(parseChoice("ETC", "  "), false);
-    assert.ok(parseChoice("ETC", "가".repeat(20)));
-    assert.equal(parseChoice("ETC", "가".repeat(21)), false);
+    assert.equal(parseChoice("OTHER", "  "), false);
+    assert.ok(parseChoice("OTHER", "가".repeat(20)));
+    assert.equal(parseChoice("OTHER", "가".repeat(21)), false);
   }
 });
 
@@ -138,22 +157,6 @@ test("소요 시간 선택지와 알 수 없는 대상 코드 검증", () => {
   );
 });
 
-test("등록 mock의 잔액 차감·부족 재검증·실패 시 잔액 유지", async () => {
-  const startingBalance = await getHelpTimeBalanceMock();
-  await assert.rejects(publishSurveyMock({ ...validSurvey, title: "" }), /SURVEY_INVALID/);
-  await assert.rejects(
-    publishSurveyMock({ ...validSurvey, respondentCount: startingBalance + 1 }),
-    /HELP_TIME_INSUFFICIENT/,
-  );
-  assert.equal(await getHelpTimeBalanceMock(), startingBalance);
-  assert.deepEqual(await publishSurveyMock(validSurvey), { helpTimeBalance: startingBalance - 15 });
-  await assert.rejects(
-    publishSurveyMock({ ...validSurvey, respondentCount: startingBalance }),
-    /HELP_TIME_INSUFFICIENT/,
-  );
-  assert.equal(await getHelpTimeBalanceMock(), startingBalance - 15);
-});
-
 test("응답 수 최소 1명·정수 제한과 대상 기타 제외", () => {
   for (const respondentCount of ["", 0, -1, 1.5, Number.POSITIVE_INFINITY]) {
     assert.equal(
@@ -168,7 +171,7 @@ test("응답 수 최소 1명·정수 제한과 대상 기타 제외", () => {
     assert.equal(
       surveyRegisterSchema.safeParse({
         ...validSurvey,
-        target: { ...validSurvey.target, [targetField]: ["ETC"] },
+        target: { ...validSurvey.target, [targetField]: ["OTHER"] },
       }).success,
       false,
     );

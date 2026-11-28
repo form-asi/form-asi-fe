@@ -20,7 +20,7 @@ import { UI_MESSAGES } from "@/lib/ui-messages";
 
 export function SurveyRegister() {
   const registration = useSurveyRegister();
-  const { form, step, dialog, balanceQuery } = registration;
+  const { form, step, dialog, balanceQuery, targetOptionsQuery } = registration;
   const previousStep = SURVEY_STEPS[step].previous;
   return (
     <>
@@ -48,25 +48,29 @@ export function SurveyRegister() {
           )
         }
       />
-      {balanceQuery.isPending && (
+      {(balanceQuery.isPending || targetOptionsQuery.isPending) && (
         <p role="status" className="p-page-inset text-body-sm text-muted-foreground">
           {REGISTER_MESSAGES.loading}
         </p>
       )}
-      {balanceQuery.isError && (
+      {(balanceQuery.isError || targetOptionsQuery.isError) && (
         <div className="p-page-inset">
           <EmptyState
             title={REGISTER_MESSAGES.loadFailed}
-            description={balanceQuery.error.message}
+            description={
+              balanceQuery.error?.message ??
+              targetOptionsQuery.error?.message ??
+              REGISTER_MESSAGES.unknownError
+            }
             action={{
               label: UI_MESSAGES.retry,
-              onClick: () => balanceQuery.refetch(),
-              disabled: balanceQuery.isFetching,
+              onClick: () => Promise.all([balanceQuery.refetch(), targetOptionsQuery.refetch()]),
+              disabled: balanceQuery.isFetching || targetOptionsQuery.isFetching,
             }}
           />
         </div>
       )}
-      {balanceQuery.isSuccess && (
+      {balanceQuery.isSuccess && targetOptionsQuery.isSuccess && (
         <FormProvider {...form}>
           {balanceQuery.data < 0 && (
             <div className="p-page-inset">
@@ -85,7 +89,7 @@ export function SurveyRegister() {
               }}
             >
               {step === "info" && <SurveyInfoStep />}
-              {step === "target" && <SurveyTargetStep />}
+              {step === "target" && <SurveyTargetStep options={targetOptionsQuery.data} />}
               {step === "intro" && <SurveyIntroStep />}
               {step === "scale" && <SurveyScaleStep helpTimeBalance={balanceQuery.data} />}
             </form>
