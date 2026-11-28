@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { type ReactNode, useRef, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,7 +17,7 @@ type ConfirmDialogProps = {
   onOpenChange: (open: boolean) => void;
   title: string;
   description: string;
-  confirmLabel: string;
+  confirmLabel: ReactNode;
   cancelLabel: string;
   tone?: "primary" | "negative";
   dismissOnBackdrop?: boolean;
