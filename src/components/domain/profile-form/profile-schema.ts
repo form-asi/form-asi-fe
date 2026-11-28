@@ -1,18 +1,19 @@
 import { z } from "zod";
-import { PROFILE_MESSAGES } from "./profile-messages";
 import {
-  CHILDREN_OPTIONS,
-  DRIVING_LICENSE_OPTIONS,
-  FIELD_OPTIONS,
-  GENDER_OPTIONS,
-  HOUSEHOLD_OPTIONS,
-  HOUSEHOLD_SIZE_OPTIONS,
-  MARITAL_STATUS_OPTIONS,
-  OCCUPATION_OPTIONS,
-  PET_EXPERIENCE_OPTIONS,
-  PET_TYPE_OPTIONS,
-  REGION_OPTIONS,
-} from "./profile-options";
+  OnboardingRequestChildrenCount,
+  OnboardingRequestDriverLicense,
+  OnboardingRequestFieldsItem,
+  OnboardingRequestGender,
+  OnboardingRequestHouseholdComposition,
+  OnboardingRequestHouseholdSize,
+  OnboardingRequestMaritalStatus,
+  OnboardingRequestOccupation,
+  OnboardingRequestPetExperience,
+  OnboardingRequestPetsItem,
+  OnboardingRequestRegion,
+} from "@/api/generated/models";
+import dayjs from "@/lib/dayjs";
+import { PROFILE_MESSAGES } from "./profile-messages";
 
 export const nicknameSchema = z
   .string()
@@ -22,39 +23,50 @@ export const nicknameSchema = z
   .regex(/^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]+$/, PROFILE_MESSAGES.nicknameCharacters);
 
 const otherTextSchema = z.string().max(20, PROFILE_MESSAGES.otherTooLong);
+const birthDateSchema = z
+  .string()
+  .min(1, PROFILE_MESSAGES.requiredField)
+  .pipe(z.iso.date({ error: PROFILE_MESSAGES.birthDateInvalid }))
+  .refine(
+    (birthDate) => birthDate <= dayjs().format("YYYY-MM-DD"),
+    PROFILE_MESSAGES.birthDateFuture,
+  );
 
 export const profileSchema = z
   .object({
     nickname: nicknameSchema,
-    age: z.number().int().nonnegative(),
     gender: z
-      .enum(["", ...GENDER_OPTIONS.map((option) => option.value)])
+      .enum(["", ...Object.values(OnboardingRequestGender)])
       .refine((gender): boolean => gender !== "", PROFILE_MESSAGES.requiredField),
     occupation: z
-      .enum(["", ...OCCUPATION_OPTIONS.map((option) => option.value)])
+      .enum(["", ...Object.values(OnboardingRequestOccupation)])
       .refine((occupation): boolean => occupation !== "", PROFILE_MESSAGES.requiredField),
     occupationOther: otherTextSchema,
-    fields: z
-      .array(z.enum(FIELD_OPTIONS.map((option) => option.value)))
-      .min(1, PROFILE_MESSAGES.requiredField),
+    fields: z.array(z.enum(OnboardingRequestFieldsItem)).min(1, PROFILE_MESSAGES.requiredField),
     fieldsOther: otherTextSchema,
-    region: z.enum(["", ...REGION_OPTIONS.map((option) => option.value)]),
-    household: z.enum(["", ...HOUSEHOLD_OPTIONS.map((option) => option.value)]),
+    region: z.enum(["", ...Object.values(OnboardingRequestRegion)]),
+    household: z.enum(["", ...Object.values(OnboardingRequestHouseholdComposition)]),
     householdOther: otherTextSchema,
-    householdSize: z.enum(["", ...HOUSEHOLD_SIZE_OPTIONS.map((option) => option.value)]),
-    maritalStatus: z.enum(["", ...MARITAL_STATUS_OPTIONS.map((option) => option.value)]),
+    householdSize: z.enum(["", ...Object.values(OnboardingRequestHouseholdSize)]),
+    maritalStatus: z.enum(["", ...Object.values(OnboardingRequestMaritalStatus)]),
     maritalStatusOther: otherTextSchema,
-    children: z.enum(["", ...CHILDREN_OPTIONS.map((option) => option.value)]),
-    petExperience: z.enum(["", ...PET_EXPERIENCE_OPTIONS.map((option) => option.value)]),
-    petTypes: z.array(z.enum(PET_TYPE_OPTIONS.map((option) => option.value))),
-    drivingLicense: z.enum(["", ...DRIVING_LICENSE_OPTIONS.map((option) => option.value)]),
+    children: z.enum(["", ...Object.values(OnboardingRequestChildrenCount)]),
+    petExperience: z.enum(["", ...Object.values(OnboardingRequestPetExperience)]),
+    petTypes: z.array(z.enum(OnboardingRequestPetsItem)),
+    drivingLicense: z.enum(["", ...Object.values(OnboardingRequestDriverLicense)]),
   })
+  .and(
+    z.union([
+      z.object({ birthDate: birthDateSchema, age: z.never().optional() }),
+      z.object({ age: z.number().int().nonnegative(), birthDate: z.never().optional() }),
+    ]),
+  )
   .superRefine((profile, context) => {
     const otherFields = [
-      [profile.occupation === "ETC", "occupationOther"],
-      [profile.fields.includes("ETC"), "fieldsOther"],
-      [profile.household === "ETC", "householdOther"],
-      [profile.maritalStatus === "ETC", "maritalStatusOther"],
+      [profile.occupation === OnboardingRequestOccupation.OTHER, "occupationOther"],
+      [profile.fields.includes(OnboardingRequestFieldsItem.OTHER), "fieldsOther"],
+      [profile.household === OnboardingRequestHouseholdComposition.OTHER, "householdOther"],
+      [profile.maritalStatus === OnboardingRequestMaritalStatus.OTHER, "maritalStatusOther"],
     ] as const;
 
     for (const [requiresOtherText, fieldName] of otherFields) {
@@ -70,11 +82,11 @@ export const profileSchema = z
 
 export type ProfileValues = z.infer<typeof profileSchema>;
 
-/** @description 서버에서 받은 나이만 채운 최초 프로필 입력값 */
-export function createEmptyProfile(age: number): ProfileValues {
+/** @description 저장된 나이가 없으면 생년월일을 직접 입력하는 최초 프로필 값 */
+export function createEmptyProfile(age?: number): ProfileValues {
   return {
     nickname: "",
-    age,
+    ...(age === undefined ? { birthDate: "" } : { age }),
     gender: "",
     occupation: "",
     occupationOther: "",

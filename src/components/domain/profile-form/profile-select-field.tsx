@@ -1,6 +1,10 @@
 "use client";
 
 import { useFormContext, useWatch } from "react-hook-form";
+import {
+  OnboardingRequestOccupation,
+  OnboardingRequestPetExperience,
+} from "@/api/generated/models";
 import { FormField } from "@/components/common/form-field";
 import { SelectSheet } from "@/components/common/select-sheet";
 import { Input } from "@/components/ui/input";
@@ -35,18 +39,22 @@ export function ProfileSelectField(props: ProfileSelectFieldProps) {
   const { control, setValue, formState } = useFormContext<ProfileValues>();
   const selection = useWatch({ control, name: props.name });
   const hasOtherSelection = Array.isArray(selection)
-    ? selection.includes("ETC")
-    : selection === "ETC";
+    ? selection.includes(OnboardingRequestOccupation.OTHER)
+    : selection === OnboardingRequestOccupation.OTHER;
   const { otherFieldName } = props;
 
   function clearHiddenFields(nextSelection: string | string[]) {
     const keepsOther = Array.isArray(nextSelection)
-      ? nextSelection.includes("ETC")
-      : nextSelection === "ETC";
+      ? nextSelection.includes(OnboardingRequestOccupation.OTHER)
+      : nextSelection === OnboardingRequestOccupation.OTHER;
     if (otherFieldName && !keepsOther) {
       setValue(otherFieldName, "", { shouldDirty: true, shouldValidate: true });
     }
-    if (props.name === "petExperience" && nextSelection !== "PAST" && nextSelection !== "CURRENT") {
+    if (
+      props.name === "petExperience" &&
+      nextSelection !== OnboardingRequestPetExperience.PAST &&
+      nextSelection !== OnboardingRequestPetExperience.CURRENT
+    ) {
       setValue("petTypes", [], { shouldDirty: true, shouldValidate: true });
     }
   }

@@ -8,12 +8,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { PROFILE_MESSAGES } from "./profile-messages";
 import { ProfileNicknameField } from "./profile-nickname-field";
 import { ProfileOptionalFields } from "./profile-optional-fields";
+import { type ProfileOptions } from "./profile-options-schema";
 import { ProfileRequiredFields } from "./profile-required-fields";
 import { type ProfileValues, profileSchema } from "./profile-schema";
 import { useNicknameCheck } from "./use-nickname-check";
 
 type ProfileFormProps = {
   initialProfile: ProfileValues;
+  options: ProfileOptions;
   confirmedNickname?: string;
   requireChanges?: boolean;
   submitLabel: string;
@@ -24,6 +26,7 @@ type ProfileFormProps = {
 /** @description S-02·S-43 공용 입력 폼. 조회·저장과 이후 이동은 호출 화면에서 처리 */
 export function ProfileForm({
   initialProfile,
+  options,
   confirmedNickname,
   requireChanges = false,
   submitLabel,
@@ -86,8 +89,8 @@ export function ProfileForm({
             nicknameVerification={nicknameVerification}
             isNicknameConfirmed={isNicknameConfirmed}
           />
-          <ProfileRequiredFields />
-          <ProfileOptionalFields />
+          <ProfileRequiredFields options={options} />
+          <ProfileOptionalFields options={options} />
           {saveError && (
             <Alert variant="destructive">
               <AlertDescription>{saveError}</AlertDescription>

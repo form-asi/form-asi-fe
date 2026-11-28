@@ -1,67 +1,61 @@
 "use client";
 
 import { useFormContext, useWatch } from "react-hook-form";
+import { OnboardingRequestPetExperience } from "@/api/generated/models";
 import { PROFILE_MESSAGES } from "./profile-messages";
-import {
-  CHILDREN_OPTIONS,
-  DRIVING_LICENSE_OPTIONS,
-  HOUSEHOLD_OPTIONS,
-  HOUSEHOLD_SIZE_OPTIONS,
-  MARITAL_STATUS_OPTIONS,
-  PET_EXPERIENCE_OPTIONS,
-  PET_TYPE_OPTIONS,
-  REGION_OPTIONS,
-} from "./profile-options";
+import { type ProfileOptions } from "./profile-options-schema";
 import { type ProfileValues } from "./profile-schema";
 import { ProfileSelectField } from "./profile-select-field";
 
-export function ProfileOptionalFields() {
+export function ProfileOptionalFields({ options }: { options: ProfileOptions }) {
   const { control } = useFormContext<ProfileValues>();
   const petExperience = useWatch({ control, name: "petExperience" });
-  const hasPetExperience = petExperience === "PAST" || petExperience === "CURRENT";
+  const hasPetExperience =
+    petExperience === OnboardingRequestPetExperience.PAST ||
+    petExperience === OnboardingRequestPetExperience.CURRENT;
 
   return (
     <>
-      <ProfileSelectField name="region" label={PROFILE_MESSAGES.region} options={REGION_OPTIONS} />
+      <ProfileSelectField name="region" label={PROFILE_MESSAGES.region} options={options.regions} />
       <ProfileSelectField
         name="household"
         label={PROFILE_MESSAGES.household}
-        options={HOUSEHOLD_OPTIONS}
+        options={options.householdCompositions}
         otherFieldName="householdOther"
       />
       <ProfileSelectField
         name="householdSize"
         label={PROFILE_MESSAGES.householdSize}
-        options={HOUSEHOLD_SIZE_OPTIONS}
+        options={options.householdSizes}
       />
       <ProfileSelectField
         name="maritalStatus"
         label={PROFILE_MESSAGES.maritalStatus}
-        options={MARITAL_STATUS_OPTIONS}
+        options={options.maritalStatuses}
         otherFieldName="maritalStatusOther"
       />
       <ProfileSelectField
         name="children"
         label={PROFILE_MESSAGES.children}
-        options={CHILDREN_OPTIONS}
+        options={options.childrenCounts}
       />
       <ProfileSelectField
         name="petExperience"
         label={PROFILE_MESSAGES.petExperience}
-        options={PET_EXPERIENCE_OPTIONS}
+        options={options.petExperiences}
       />
       {hasPetExperience && (
         <ProfileSelectField
           name="petTypes"
           label={PROFILE_MESSAGES.petTypes}
-          options={PET_TYPE_OPTIONS}
+          options={options.petTypes}
           multiple
         />
       )}
       <ProfileSelectField
         name="drivingLicense"
         label={PROFILE_MESSAGES.drivingLicense}
-        options={DRIVING_LICENSE_OPTIONS}
+        options={options.driverLicenses}
       />
     </>
   );

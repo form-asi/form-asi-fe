@@ -3,7 +3,6 @@ export const PROFILE_MESSAGES = {
   editTitle: "프로필 수정",
   intro:
     "프로필은 설문 추천과 대상 판정에 쓰여요. 이외 용도로는 전혀 사용되지 않으며 안전하게 보관돼요. 마이페이지에서 언제든 수정할 수 있어요.",
-  skip: "나중에 할게요",
   start: "시작하기",
   save: "저장",
   clearSelection: "선택 안 함",
@@ -21,6 +20,9 @@ export const PROFILE_MESSAGES = {
   otherPlaceholder: "직접 입력 (공백 포함 20자 이내)",
   otherLabel: (label: string) => `${label} 직접 입력`,
   age: "나이",
+  birthDate: "생년월일",
+  birthDateInvalid: "생년월일을 YYYY-MM-DD 형식으로 입력해 주세요",
+  birthDateFuture: "생년월일에 미래 날짜는 입력할 수 없어요",
   ageValue: (age: number) => `만 ${age}세`,
   gender: "성별",
   occupation: "직업",

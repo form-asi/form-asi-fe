@@ -5,18 +5,13 @@ let currentProfile: ProfileValues = {
   ...createEmptyProfile(29),
   nickname: "품앗이1",
   gender: "FEMALE",
-  occupation: "EMPLOYED",
+  occupation: "EMPLOYEE",
   fields: ["DESIGN"],
   region: "SEOUL",
 };
 
 const takenNicknames = new Set(["pumasi", "formasi", "폼앗이"]);
 const waitForMockResponse = () => new Promise((resolve) => setTimeout(resolve, 200));
-
-export async function getProfileAgeMock() {
-  await waitForMockResponse();
-  return currentProfile.age;
-}
 
 export async function getCurrentProfileMock(): Promise<ProfileValues> {
   await waitForMockResponse();
