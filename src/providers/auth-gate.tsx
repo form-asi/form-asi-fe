@@ -1,12 +1,12 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { Loader2Icon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
 import { setAccessToken } from "@/api/fetcher";
 import { useMe } from "@/api/generated/endpoints/user/user";
 import { EmptyState } from "@/components/common/empty-state";
+import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { getAuthRedirect } from "@/lib/auth-redirect";
 import { getAuthState, restoreCurrentUser, subscribeToUnauthorized } from "@/lib/auth-session";
 import { UI_MESSAGES } from "@/lib/ui-messages";
@@ -41,12 +41,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
   }, [redirectTo, router]);
 
   if (authState.kind === "checking" || redirectTo) {
-    return (
-      <div role="status" className="flex min-h-dvh items-center justify-center">
-        <Loader2Icon aria-hidden="true" className="size-6 animate-spin text-muted-foreground" />
-        <span className="sr-only">{UI_MESSAGES.checkingSession}</span>
-      </div>
-    );
+    return <LoadingSpinner label={UI_MESSAGES.checkingSession} className="min-h-dvh" />;
   }
   if (authState.kind === "error") {
     return (
