@@ -1,32 +1,63 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { EmptyState } from "@/components/common/empty-state";
 import {
-  checkNicknameMock,
-  getProfileAgeMock,
-  saveProfileMock,
-} from "@/components/domain/profile-form/profile-api.mock";
+  getMeQueryKey,
+  getNicknameAvailabilityQueryOptions,
+  useCompleteOnboarding,
+  useMe,
+  useProfileOptions,
+} from "@/api/generated/endpoints/user/user";
+import {
+  type BaseResponseCurrentUserResponse,
+  OnboardingResponseStatus,
+} from "@/api/generated/models";
+import { EmptyState } from "@/components/common/empty-state";
 import { ProfileForm } from "@/components/domain/profile-form/profile-form";
 import { PROFILE_MESSAGES } from "@/components/domain/profile-form/profile-messages";
+import {
+  type ProfileOptions,
+  parseProfileOptions,
+} from "@/components/domain/profile-form/profile-options-schema";
 import {
   createEmptyProfile,
   type ProfileValues,
 } from "@/components/domain/profile-form/profile-schema";
-import { Button } from "@/components/ui/button";
+import { toOnboardingRequest } from "@/features/onboarding/lib/onboarding-request";
 import { ROUTES } from "@/lib/routes";
 import { UI_MESSAGES } from "@/lib/ui-messages";
 
 export function OnboardingProfileScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const profileAgeQuery = useQuery({ queryKey: ["profile", "age"], queryFn: getProfileAgeMock });
-  const saveProfile = useMutation({ mutationFn: saveProfileMock });
+  const currentUserQuery = useMe<BaseResponseCurrentUserResponse, Error>();
+  const profileOptionsQuery = useProfileOptions<ProfileOptions, Error>({
+    query: { select: parseProfileOptions },
+  });
+  const completeOnboarding = useCompleteOnboarding<Error>();
+
+  async function checkNickname(nickname: string) {
+    const response = await queryClient.fetchQuery({
+      ...getNicknameAvailabilityQueryOptions({ nickname }),
+      staleTime: 0,
+    });
+    const available = response.data?.available;
+    if (typeof available !== "boolean") throw new Error(PROFILE_MESSAGES.unknownError);
+    return { available };
+  }
 
   async function handleStartWithProfile(profile: ProfileValues) {
-    const savedProfile = await saveProfile.mutateAsync(profile);
-    queryClient.setQueryData(["profile", "current"], savedProfile);
+    const response = await completeOnboarding.mutateAsync({ data: toOnboardingRequest(profile) });
+    const completedUser = response.data;
+    if (completedUser?.status !== OnboardingResponseStatus.ACTIVE)
+      throw new Error(PROFILE_MESSAGES.unknownError);
+    queryClient.setQueryData<BaseResponseCurrentUserResponse>(getMeQueryKey(), (currentResponse) =>
+      currentResponse?.data
+        ? { ...currentResponse, data: { ...currentResponse.data, ...completedUser } }
+        : currentResponse,
+    );
+    void queryClient.invalidateQueries({ queryKey: getMeQueryKey() });
     router.replace(ROUTES.explore);
   }
 
@@ -35,17 +66,9 @@ export function OnboardingProfileScreen() {
       <h1 className="min-w-0 flex-1 truncate text-title-md font-semibold">
         {PROFILE_MESSAGES.createTitle}
       </h1>
-      <Button
-        type="button"
-        variant="ghost"
-        className="h-10 px-2 text-foreground-secondary"
-        onClick={() => router.replace(ROUTES.explore)}
-      >
-        {PROFILE_MESSAGES.skip}
-      </Button>
     </header>
   );
-  if (profileAgeQuery.isPending) {
+  if (currentUserQuery.isPending || profileOptionsQuery.isPending) {
     return (
       <>
         {header}
@@ -55,18 +78,23 @@ export function OnboardingProfileScreen() {
       </>
     );
   }
-  if (profileAgeQuery.isError) {
+  if (currentUserQuery.isError || profileOptionsQuery.isError) {
     return (
       <>
         {header}
         <div className="p-page-inset">
           <EmptyState
             title={PROFILE_MESSAGES.loadFailed}
-            description={profileAgeQuery.error.message}
+            description={
+              currentUserQuery.error?.message ??
+              profileOptionsQuery.error?.message ??
+              PROFILE_MESSAGES.unknownError
+            }
             action={{
               label: UI_MESSAGES.retry,
-              onClick: () => profileAgeQuery.refetch(),
-              disabled: profileAgeQuery.isFetching,
+              onClick: () =>
+                Promise.all([currentUserQuery.refetch(), profileOptionsQuery.refetch()]),
+              disabled: currentUserQuery.isFetching || profileOptionsQuery.isFetching,
             }}
           />
         </div>
@@ -77,9 +105,10 @@ export function OnboardingProfileScreen() {
     <>
       {header}
       <ProfileForm
-        initialProfile={createEmptyProfile(profileAgeQuery.data)}
+        initialProfile={createEmptyProfile(currentUserQuery.data?.data?.age ?? undefined)}
+        options={profileOptionsQuery.data}
         submitLabel={PROFILE_MESSAGES.start}
-        checkNickname={checkNicknameMock}
+        checkNickname={checkNickname}
         onSaveProfile={handleStartWithProfile}
       />
     </>

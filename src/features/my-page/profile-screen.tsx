@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useProfileOptions } from "@/api/generated/endpoints/user/user";
 import { AppHeader } from "@/components/common/app-header";
 import { EmptyState } from "@/components/common/empty-state";
 import {
@@ -12,6 +13,10 @@ import {
 } from "@/components/domain/profile-form/profile-api.mock";
 import { ProfileForm } from "@/components/domain/profile-form/profile-form";
 import { PROFILE_MESSAGES } from "@/components/domain/profile-form/profile-messages";
+import {
+  type ProfileOptions,
+  parseProfileOptions,
+} from "@/components/domain/profile-form/profile-options-schema";
 import { type ProfileValues } from "@/components/domain/profile-form/profile-schema";
 import { UI_MESSAGES } from "@/lib/ui-messages";
 
@@ -23,6 +28,9 @@ export function EditProfileScreen() {
     queryFn: getCurrentProfileMock,
   });
   const saveProfile = useMutation({ mutationFn: saveProfileMock });
+  const profileOptionsQuery = useProfileOptions<ProfileOptions, Error>({
+    query: { select: parseProfileOptions },
+  });
 
   async function handleSaveProfile(profile: ProfileValues) {
     const savedProfile = await saveProfile.mutateAsync(profile);
@@ -34,7 +42,7 @@ export function EditProfileScreen() {
   const header = (
     <AppHeader title={PROFILE_MESSAGES.editTitle} back={{ onBack: () => router.back() }} />
   );
-  if (currentProfileQuery.isPending) {
+  if (currentProfileQuery.isPending || profileOptionsQuery.isPending) {
     return (
       <>
         {header}
@@ -44,18 +52,23 @@ export function EditProfileScreen() {
       </>
     );
   }
-  if (currentProfileQuery.isError) {
+  if (currentProfileQuery.isError || profileOptionsQuery.isError) {
     return (
       <>
         {header}
         <div className="p-page-inset">
           <EmptyState
             title={PROFILE_MESSAGES.loadFailed}
-            description={currentProfileQuery.error.message}
+            description={
+              currentProfileQuery.error?.message ??
+              profileOptionsQuery.error?.message ??
+              PROFILE_MESSAGES.unknownError
+            }
             action={{
               label: UI_MESSAGES.retry,
-              onClick: () => currentProfileQuery.refetch(),
-              disabled: currentProfileQuery.isFetching,
+              onClick: () =>
+                Promise.all([currentProfileQuery.refetch(), profileOptionsQuery.refetch()]),
+              disabled: currentProfileQuery.isFetching || profileOptionsQuery.isFetching,
             }}
           />
         </div>
@@ -67,6 +80,7 @@ export function EditProfileScreen() {
       {header}
       <ProfileForm
         initialProfile={currentProfileQuery.data}
+        options={profileOptionsQuery.data}
         confirmedNickname={currentProfileQuery.data.nickname}
         requireChanges
         submitLabel={PROFILE_MESSAGES.save}
