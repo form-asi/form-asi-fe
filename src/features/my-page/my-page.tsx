@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMe } from "@/api/generated/endpoints/user/user";
 import ChevronRightIcon from "@/assets/icons/chevron-right.svg";
 import { EmptyState } from "@/components/common/empty-state";
+import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { MyHelpTimeCard } from "@/features/my-page/components/my-help-time-card";
 import { MyPageProfile } from "@/features/my-page/components/my-page-profile";
 import { type MyPageSummary, parseMyPageSummary } from "@/features/my-page/lib/my-page-summary";
@@ -16,11 +17,7 @@ export function MyPage() {
   return (
     <div className="flex flex-col gap-5 p-page-inset pb-10">
       <h1 className="text-title-md font-semibold">{MY_PAGE_MESSAGES.title}</h1>
-      {currentUserQuery.isPending && (
-        <p role="status" className="text-body-sm text-muted-foreground">
-          {MY_PAGE_MESSAGES.loading}
-        </p>
-      )}
+      {currentUserQuery.isPending && <LoadingSpinner label={MY_PAGE_MESSAGES.loading} />}
       {currentUserQuery.isError && (
         <EmptyState
           title={MY_PAGE_MESSAGES.loadFailed}

@@ -5,6 +5,7 @@ import { AppHeader } from "@/components/common/app-header";
 import { BottomCTA } from "@/components/common/bottom-cta";
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
 import { EmptyState } from "@/components/common/empty-state";
+import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { HelpTimeChip } from "@/components/domain/help-time-chip";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { SurveyInfoStep } from "@/features/my-survey/register/components/survey-info-step";
@@ -49,9 +50,7 @@ export function SurveyRegister() {
         }
       />
       {(balanceQuery.isPending || targetOptionsQuery.isPending) && (
-        <p role="status" className="p-page-inset text-body-sm text-muted-foreground">
-          {REGISTER_MESSAGES.loading}
-        </p>
+        <LoadingSpinner label={REGISTER_MESSAGES.loading} />
       )}
       {(balanceQuery.isError || targetOptionsQuery.isError) && (
         <div className="p-page-inset">

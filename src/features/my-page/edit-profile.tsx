@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { AppHeader } from "@/components/common/app-header";
 import { EmptyState } from "@/components/common/empty-state";
+import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { ProfileForm } from "@/components/domain/profile-form/profile-form";
 import { PROFILE_MESSAGES } from "@/components/domain/profile-form/profile-messages";
 import { useEditProfile } from "@/features/my-page/hooks/use-edit-profile";
@@ -20,9 +21,7 @@ export function EditProfile() {
     return (
       <>
         {header}
-        <p role="status" className="p-page-inset text-body-sm text-muted-foreground">
-          {PROFILE_MESSAGES.loading}
-        </p>
+        <LoadingSpinner label={PROFILE_MESSAGES.loading} />
       </>
     );
   }
