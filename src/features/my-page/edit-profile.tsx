@@ -1,43 +1,17 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { useProfileOptions } from "@/api/generated/endpoints/user/user";
 import { AppHeader } from "@/components/common/app-header";
 import { EmptyState } from "@/components/common/empty-state";
-import {
-  checkNicknameMock,
-  getCurrentProfileMock,
-  saveProfileMock,
-} from "@/components/domain/profile-form/profile-api.mock";
 import { ProfileForm } from "@/components/domain/profile-form/profile-form";
 import { PROFILE_MESSAGES } from "@/components/domain/profile-form/profile-messages";
-import {
-  type ProfileOptions,
-  parseProfileOptions,
-} from "@/components/domain/profile-form/profile-options-schema";
-import { type ProfileValues } from "@/components/domain/profile-form/profile-schema";
+import { useEditProfile } from "@/features/my-page/hooks/use-edit-profile";
 import { UI_MESSAGES } from "@/lib/ui-messages";
 
-export function EditProfileScreen() {
+export function EditProfile() {
   const router = useRouter();
-  const queryClient = useQueryClient();
-  const currentProfileQuery = useQuery({
-    queryKey: ["profile", "current"],
-    queryFn: getCurrentProfileMock,
-  });
-  const saveProfile = useMutation({ mutationFn: saveProfileMock });
-  const profileOptionsQuery = useProfileOptions<ProfileOptions, Error>({
-    query: { select: parseProfileOptions },
-  });
-
-  async function handleSaveProfile(profile: ProfileValues) {
-    const savedProfile = await saveProfile.mutateAsync(profile);
-    queryClient.setQueryData(["profile", "current"], savedProfile);
-    toast.success(UI_MESSAGES.toast.saved);
-    router.back();
-  }
+  const { currentProfileQuery, profileOptionsQuery, checkNickname, handleSaveProfile } =
+    useEditProfile();
 
   const header = (
     <AppHeader title={PROFILE_MESSAGES.editTitle} back={{ onBack: () => router.back() }} />
@@ -84,7 +58,7 @@ export function EditProfileScreen() {
         confirmedNickname={currentProfileQuery.data.nickname}
         requireChanges
         submitLabel={PROFILE_MESSAGES.save}
-        checkNickname={checkNicknameMock}
+        checkNickname={checkNickname}
         onSaveProfile={handleSaveProfile}
       />
     </>

@@ -4,7 +4,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import {
   getMeQueryKey,
-  getNicknameAvailabilityQueryOptions,
   useCompleteOnboarding,
   useMe,
   useProfileOptions,
@@ -24,6 +23,7 @@ import {
   createEmptyProfile,
   type ProfileValues,
 } from "@/components/domain/profile-form/profile-schema";
+import { useNicknameAvailability } from "@/components/domain/profile-form/use-nickname-availability";
 import { toOnboardingRequest } from "@/features/onboarding/lib/onboarding-request";
 import { ROUTES } from "@/lib/routes";
 import { UI_MESSAGES } from "@/lib/ui-messages";
@@ -36,16 +36,7 @@ export function OnboardingProfileScreen() {
     query: { select: parseProfileOptions },
   });
   const completeOnboarding = useCompleteOnboarding<Error>();
-
-  async function checkNickname(nickname: string) {
-    const response = await queryClient.fetchQuery({
-      ...getNicknameAvailabilityQueryOptions({ nickname }),
-      staleTime: 0,
-    });
-    const available = response.data?.available;
-    if (typeof available !== "boolean") throw new Error(PROFILE_MESSAGES.unknownError);
-    return { available };
-  }
+  const checkNickname = useNicknameAvailability();
 
   async function handleStartWithProfile(profile: ProfileValues) {
     const response = await completeOnboarding.mutateAsync({ data: toOnboardingRequest(profile) });

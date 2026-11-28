@@ -1,49 +1,7 @@
-import {
-  type OnboardingRequest,
-  OnboardingRequestFieldsItem,
-  OnboardingRequestHouseholdComposition,
-  OnboardingRequestMaritalStatus,
-  OnboardingRequestOccupation,
-  OnboardingRequestPetExperience,
-} from "@/api/generated/models";
-import { PROFILE_MESSAGES } from "@/components/domain/profile-form/profile-messages";
-import { type ProfileValues, profileSchema } from "@/components/domain/profile-form/profile-schema";
+import { type OnboardingRequest } from "@/api/generated/models";
+import { toProfileUpdateRequest } from "@/components/domain/profile-form/profile-request";
+import { type ProfileValues } from "@/components/domain/profile-form/profile-schema";
 
 export function toOnboardingRequest(profile: ProfileValues): OnboardingRequest {
-  const validatedProfile = profileSchema.parse(profile);
-  const { gender, occupation, petExperience } = validatedProfile;
-  if (gender === "" || occupation === "") throw new Error(PROFILE_MESSAGES.requiredField);
-  const hasPetExperience =
-    petExperience === OnboardingRequestPetExperience.PAST ||
-    petExperience === OnboardingRequestPetExperience.CURRENT;
-  return {
-    nickname: validatedProfile.nickname,
-    birthDate: validatedProfile.birthDate,
-    gender,
-    occupation,
-    occupationOther:
-      occupation === OnboardingRequestOccupation.OTHER
-        ? validatedProfile.occupationOther
-        : undefined,
-    fields: validatedProfile.fields,
-    fieldOther: validatedProfile.fields.includes(OnboardingRequestFieldsItem.OTHER)
-      ? validatedProfile.fieldsOther
-      : undefined,
-    region: validatedProfile.region || undefined,
-    householdComposition: validatedProfile.household || undefined,
-    householdCompositionOther:
-      validatedProfile.household === OnboardingRequestHouseholdComposition.OTHER
-        ? validatedProfile.householdOther
-        : undefined,
-    householdSize: validatedProfile.householdSize || undefined,
-    maritalStatus: validatedProfile.maritalStatus || undefined,
-    maritalStatusOther:
-      validatedProfile.maritalStatus === OnboardingRequestMaritalStatus.OTHER
-        ? validatedProfile.maritalStatusOther
-        : undefined,
-    childrenCount: validatedProfile.children || undefined,
-    petExperience: petExperience || undefined,
-    pets: hasPetExperience ? validatedProfile.petTypes : [],
-    driverLicense: validatedProfile.drivingLicense || undefined,
-  };
+  return { ...toProfileUpdateRequest(profile), birthDate: profile.birthDate };
 }
