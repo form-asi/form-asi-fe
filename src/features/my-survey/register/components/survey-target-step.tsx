@@ -13,22 +13,18 @@ import {
   TARGET_AUDIENCES,
   type TargetAudience,
 } from "@/features/my-survey/register/survey-register-schema";
-import * as options from "@/features/my-survey/register/survey-target-options";
+import { type SurveyTargetOptions } from "@/features/my-survey/register/survey-target-options";
 
-const BASIC_FIELDS = [
-  { name: "gender", options: options.GENDER_OPTIONS },
-  { name: "occupation", options: options.OCCUPATION_OPTIONS },
-  { name: "fields", options: options.FIELD_OPTIONS },
-] as const;
+const BASIC_FIELDS = ["gender", "occupation", "fields"] as const;
 const LIVING_FIELDS = [
-  { name: "region", options: options.REGION_OPTIONS },
-  { name: "household", options: options.HOUSEHOLD_OPTIONS },
-  { name: "householdSize", options: options.HOUSEHOLD_SIZE_OPTIONS },
-  { name: "maritalStatus", options: options.MARITAL_STATUS_OPTIONS },
-  { name: "children", options: options.CHILDREN_OPTIONS },
-  { name: "petExperience", options: options.PET_EXPERIENCE_OPTIONS },
-  { name: "petTypes", options: options.PET_TYPE_OPTIONS },
-  { name: "drivingLicense", options: options.DRIVING_LICENSE_OPTIONS },
+  "region",
+  "household",
+  "householdSize",
+  "maritalStatus",
+  "children",
+  "petExperience",
+  "petTypes",
+  "drivingLicense",
 ] as const;
 const AUDIENCE_LABELS = {
   ANYONE: REGISTER_MESSAGES.audienceAnyone,
@@ -43,13 +39,13 @@ function toSelectedSummary(count: number) {
   return count > 0 ? REGISTER_MESSAGES.selectedCount(count) : undefined;
 }
 
-export function SurveyTargetStep() {
+export function SurveyTargetStep({ options }: { options: SurveyTargetOptions }) {
   const { control, setValue } = useFormContext<SurveyRegisterValues>();
   const target = useWatch({ control, name: "target" });
   const hasAgeRange = target.minimumAge !== "" || target.maximumAge !== "";
   const basicCount =
-    Number(hasAgeRange) + BASIC_FIELDS.filter(({ name }) => target[name].length > 0).length;
-  const livingCount = LIVING_FIELDS.filter(({ name }) => target[name].length > 0).length;
+    Number(hasAgeRange) + BASIC_FIELDS.filter((name) => target[name].length > 0).length;
+  const livingCount = LIVING_FIELDS.filter((name) => target[name].length > 0).length;
 
   // "누구나"로 바꾸면 숨겨진 조건이 남아 등록되지 않도록 조건을 비운다
   function handleChangeAudience(selectedAudiences: string[]) {
@@ -88,12 +84,12 @@ export function SurveyTargetStep() {
               summary={toSelectedSummary(basicCount)}
             >
               <SurveyAgeFields />
-              {BASIC_FIELDS.map(({ name, options: fieldOptions }) => (
+              {BASIC_FIELDS.map((name) => (
                 <SurveyMultiSelectField
                   key={name}
                   name={`target.${name}`}
                   label={REGISTER_MESSAGES.targetLabels[name]}
-                  options={fieldOptions}
+                  options={options[name]}
                 />
               ))}
             </SurveySection>
@@ -101,12 +97,12 @@ export function SurveyTargetStep() {
               title={REGISTER_MESSAGES.livingConditions}
               summary={toSelectedSummary(livingCount)}
             >
-              {LIVING_FIELDS.map(({ name, options: fieldOptions }) => (
+              {LIVING_FIELDS.map((name) => (
                 <SurveyMultiSelectField
                   key={name}
                   name={`target.${name}`}
                   label={REGISTER_MESSAGES.targetLabels[name]}
-                  options={fieldOptions}
+                  options={options[name]}
                 />
               ))}
             </SurveySection>
