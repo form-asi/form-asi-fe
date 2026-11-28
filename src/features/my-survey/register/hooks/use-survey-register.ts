@@ -8,7 +8,12 @@ import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { ApiError } from "@/api/fetcher";
 import { useRegister } from "@/api/generated/endpoints/survey/survey";
-import { getMeQueryKey, useMe, useProfileOptions } from "@/api/generated/endpoints/user/user";
+import {
+  getMeQueryKey,
+  getMyHelpTimeQueryKey,
+  useMe,
+  useProfileOptions,
+} from "@/api/generated/endpoints/user/user";
 import { parseProfileOptions } from "@/components/domain/profile-form/profile-options-schema";
 import { useLeaveGuard } from "@/features/my-survey/register/hooks/use-leave-guard";
 import { toSurveyCreateRequest } from "@/features/my-survey/register/lib/survey-create-request";
@@ -108,7 +113,10 @@ export function useSurveyRegister() {
   async function handleConfirmPublish() {
     const survey = form.getValues();
     await publishMutation.mutateAsync({ data: toSurveyCreateRequest(survey) });
-    await queryClient.invalidateQueries({ queryKey: getMeQueryKey() });
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: getMeQueryKey() }),
+      queryClient.invalidateQueries({ queryKey: getMyHelpTimeQueryKey() }),
+    ]);
     await leaveRegistration(ROUTES.mySurvey);
     toast.success(UI_MESSAGES.toast.surveyPublished);
   }
