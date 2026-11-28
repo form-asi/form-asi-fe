@@ -12,6 +12,7 @@ export const ROUTES = {
   myPage: "/my-page",
   helpTime: "/my-page/help-time",
   profileEdit: "/my-page/profile",
+  settings: "/my-page/settings",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];
