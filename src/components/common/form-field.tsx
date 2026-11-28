@@ -42,6 +42,7 @@ type FormFieldProps<
     field: ControllerRenderProps<FormValues, FieldName>;
     controlProps: FieldControlProps;
   }) => ReactNode;
+  renderHint?: (field: ControllerRenderProps<FormValues, FieldName>) => ReactNode;
 };
 
 /**
@@ -64,6 +65,7 @@ function FormField<
   showOptionalTag = true,
   description,
   render,
+  renderHint,
 }: FormFieldProps<FormValues, FieldName, TransformedValues>) {
   const { field, fieldState } = useController({ control, name, disabled, shouldUnregister });
   const fieldId = useId();
@@ -128,10 +130,15 @@ function FormField<
           "aria-required": required,
         },
       })}
-      {errorMessage && (
-        <FieldMessage id={errorId} tone="error">
-          {errorMessage}
-        </FieldMessage>
+      {(errorMessage || renderHint) && (
+        <div className="flex items-start gap-field-gap">
+          {errorMessage && (
+            <FieldMessage id={errorId} tone="error">
+              {errorMessage}
+            </FieldMessage>
+          )}
+          {renderHint && <div className="ml-auto shrink-0">{renderHint(field)}</div>}
+        </div>
       )}
     </div>
   );

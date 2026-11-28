@@ -38,17 +38,17 @@ export function SurveyTextField({
       required={required}
       hideLabel={hideLabel}
       showOptionalTag={false}
-      render={({ field, controlProps }) => (
-        <div className="flex flex-col gap-1.5">
-          {multiline ? (
-            <Textarea {...field} {...controlProps} maxLength={limit} placeholder={placeholder} />
-          ) : (
-            <Input {...field} {...controlProps} maxLength={limit} placeholder={placeholder} />
-          )}
-          <p className="text-right text-caption-lg text-muted-foreground">
-            {REGISTER_MESSAGES.characterCount(field.value.length, limit)}
-          </p>
-        </div>
+      render={({ field, controlProps }) =>
+        multiline ? (
+          <Textarea {...field} {...controlProps} maxLength={limit} placeholder={placeholder} />
+        ) : (
+          <Input {...field} {...controlProps} maxLength={limit} placeholder={placeholder} />
+        )
+      }
+      renderHint={(field) => (
+        <p className="text-right text-caption-lg text-muted-foreground">
+          {REGISTER_MESSAGES.characterCount(field.value.length, limit)}
+        </p>
       )}
     />
   );
